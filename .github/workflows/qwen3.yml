@@ -1,0 +1,84 @@
+name: Qwen 3 real
+
+# Corre el caso ficticio de ejemplos/puerto_ventisca con Qwen 3 en CPU:
+# extracción, almacén, agente con herramientas y verificación de citas.
+on:
+  workflow_dispatch:
+    inputs:
+      modelo:
+        description: "Modelo de chat (qwen3:4b · qwen3:8b · qwen3:14b)"
+        default: "qwen3:4b"
+      embeddings:
+        description: "Modelo de embeddings (vacío = solo búsqueda léxica)"
+        default: "bge-m3"
+  push:
+    branches: [main]
+    paths:
+      - "telar_motor/**"
+      - "tests/test_pipeline.py"
+      - "ejemplos/**"
+      - "pyproject.toml"
+      - ".github/workflows/qwen3.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qwen3
+  cancel-in-progress: true
+
+env:
+  OLLAMA_MODELS: ${{ github.workspace }}/.ollama-modelos
+  OLLAMA_BASE_URL: http://127.0.0.1:11434/v1
+  OLLAMA_MODEL: ${{ inputs.modelo || 'qwen3:4b' }}
+  OLLAMA_EMBED_MODEL: ${{ inputs.embeddings || 'bge-m3' }}
+  MOTOR_TIMEOUT_S: "900"
+
+jobs:
+  qwen3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - run: pip install -e ".[dev]"
+
+      - name: Caché de modelos
+        uses: actions/cache@v4
+        with:
+          path: .ollama-modelos
+          key: ollama-${{ env.OLLAMA_MODEL }}-${{ env.OLLAMA_EMBED_MODEL }}-v1
+
+      - name: Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          sudo systemctl stop ollama 2>/dev/null || true
+          mkdir -p "$OLLAMA_MODELS"
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/tags >/dev/null && break; sleep 2; done
+          ollama --version
+          ollama pull "$OLLAMA_MODEL"
+          if [ -n "$OLLAMA_EMBED_MODEL" ]; then ollama pull "$OLLAMA_EMBED_MODEL"; fi
+
+      - name: Caso ficticio con Qwen 3
+        run: |
+          set -o pipefail
+          python -m pytest tests/test_pipeline.py -q -s -k real 2>&1 | tee /tmp/caso.txt
+
+      - name: Resumen
+        if: always()
+        run: |
+          {
+            echo "### Qwen 3 · ${OLLAMA_MODEL} (embeddings: ${OLLAMA_EMBED_MODEL:-ninguno})"
+            echo '```'
+            tail -n 80 /tmp/caso.txt 2>/dev/null || echo "Sin salida."
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Registro de Ollama
+        if: failure()
+        run: tail -n 120 /tmp/ollama.log || true

@@ -1,0 +1,27 @@
+name: Pruebas
+
+# Pruebas de plomería: no necesitan Ollama ni modelos (un doble del cliente
+# de OpenAI devuelve respuestas guionizadas). Corren en cada push y pull request.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - run: pip install -e ".[dev]"
+      - run: python -m pyflakes telar_motor tests
+      - run: python -m pytest -q

@@ -1,0 +1,10 @@
+.env
+*.sqlite
+*.sqlite-journal
+exportacion/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
+build/
+dist/
