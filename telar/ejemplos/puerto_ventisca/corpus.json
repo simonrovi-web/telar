@@ -1,0 +1,38 @@
+[
+ {
+  "id": "decreto-2214-2025",
+  "titulo": "Decreto Alcaldicio N° 2.214 · Municipalidad de Puerto Ventisca",
+  "tipo": "decreto",
+  "fuente": "Municipalidad de Puerto Ventisca",
+  "fecha": "2025-03-14",
+  "url": "https://example.org/puerto-ventisca/decretos/2214-2025",
+  "texto": "DECRETO ALCALDICIO N° 2.214. Puerto Ventisca, 14 de marzo de 2025.\n\nVISTOS: el informe de la comisión evaluadora de la licitación pública ID 4471-12-LP25, denominada «Reposición de la Costanera Sur de Puerto Ventisca».\n\nDECRETO: 1. Adjudícase la licitación pública ID 4471-12-LP25 a Constructora Austral Ventisca Limitada, RUT 76.555.120-K, por un monto total de $ 1.240.000.000, impuestos incluidos. 2. Impútese el gasto al presupuesto municipal vigente.\n\nAnótese, comuníquese y archívese. Firmado: Abelardo Sotomayor Lienlaf, Alcalde de la Municipalidad de Puerto Ventisca."
+ },
+ {
+  "id": "contrato-costanera-2025",
+  "titulo": "Contrato de ejecución de obra · Costanera Sur",
+  "tipo": "contrato",
+  "fuente": "Municipalidad de Puerto Ventisca",
+  "fecha": "2025-04-02",
+  "url": "https://example.org/puerto-ventisca/contratos/costanera-sur",
+  "texto": "En Puerto Ventisca, a 2 de abril de 2025, entre la Municipalidad de Puerto Ventisca, representada por su alcalde don Abelardo Sotomayor Lienlaf, y Constructora Austral Ventisca Limitada, representada legalmente por doña Mirta Echaurren Paillalef, se celebra el presente contrato para la ejecución de la obra «Reposición de la Costanera Sur», por la suma de $ 1.240.000.000 y un plazo de 300 días corridos."
+ },
+ {
+  "id": "prensa-faro-2025-06-10",
+  "titulo": "Concejal denuncia parentesco en adjudicación de la Costanera · El Faro de Ventisca",
+  "tipo": "prensa",
+  "fuente": "El Faro de Ventisca",
+  "fecha": "2025-06-10",
+  "url": "https://example.org/el-faro-de-ventisca/2025/06/10/costanera",
+  "texto": "El concejal Gaspar Ugarte Rivas presentó una denuncia ante la Contraloría Regional de Los Fiordes por la adjudicación de la Costanera Sur. Según Ugarte, la representante legal de la empresa adjudicataria, Mirta Echaurren Paillalef, es cuñada del alcalde Abelardo Sotomayor Lienlaf.\n\nConsultado por este medio, el alcalde Sotomayor declaró que «no participé en la comisión evaluadora y el proceso fue público». La comisión fue presidida por el director de Obras Municipales, Iván Cárcamo Toledo."
+ },
+ {
+  "id": "contraloria-418-2025",
+  "titulo": "Informe Final N° 418/2025 · Contraloría Regional de Los Fiordes",
+  "tipo": "resolucion",
+  "fuente": "Contraloría Regional de Los Fiordes",
+  "fecha": "2025-09-22",
+  "url": "https://example.org/contraloria-los-fiordes/informes/418-2025",
+  "texto": "INFORME FINAL N° 418/2025. La Contraloría Regional de Los Fiordes constató que la licitación ID 4471-12-LP25 recibió una única oferta, presentada por Constructora Austral Ventisca Limitada. Se observa que las bases exigieron experiencia previa en obras costeras por un mínimo de $ 2.000.000.000, requisito que redujo la competencia. El informe no se pronuncia sobre el parentesco denunciado y remite los antecedentes al Ministerio Público."
+ }
+]

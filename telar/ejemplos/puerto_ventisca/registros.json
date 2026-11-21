@@ -1,0 +1,41 @@
+[
+ {
+  "id": "4471-12-LP25",
+  "tipo": "licitacion",
+  "fecha": "2025-03-14",
+  "organismo": "Municipalidad de Puerto Ventisca",
+  "proveedor": "Constructora Austral Ventisca Limitada",
+  "rut_proveedor": "76.555.120-K",
+  "monto": 1240000000,
+  "moneda": "CLP",
+  "descripcion": "Reposición de la Costanera Sur",
+  "doc_id": "decreto-2214-2025",
+  "url": "https://example.org/puerto-ventisca/decretos/2214-2025"
+ },
+ {
+  "id": "4471-31-LE24",
+  "tipo": "licitacion",
+  "fecha": "2024-08-05",
+  "organismo": "Municipalidad de Puerto Ventisca",
+  "proveedor": "Constructora Austral Ventisca Limitada",
+  "rut_proveedor": "76.555.120-K",
+  "monto": 186500000,
+  "moneda": "CLP",
+  "descripcion": "Mejoramiento de veredas sector Lenca",
+  "doc_id": null,
+  "url": "https://example.org/puerto-ventisca/licitaciones/4471-31-LE24"
+ },
+ {
+  "id": "4471-07-L124",
+  "tipo": "licitacion",
+  "fecha": "2024-11-20",
+  "organismo": "Municipalidad de Puerto Ventisca",
+  "proveedor": "Áridos Lenca SpA",
+  "rut_proveedor": "77.010.330-4",
+  "monto": 42300000,
+  "moneda": "CLP",
+  "descripcion": "Suministro de áridos",
+  "doc_id": null,
+  "url": "https://example.org/puerto-ventisca/licitaciones/4471-07-L124"
+ }
+]
