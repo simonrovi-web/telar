@@ -10,6 +10,8 @@ on:
     branches: [main]
     paths:
       - "evidencia/**"
+      - "identidad/**"
+      - "docs/data/identidad.json"
       - ".github/workflows/evidencia.yml"
 
 permissions:
@@ -31,7 +33,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r evidencia/requirements.txt pytest
-      - run: python -m pytest -q tests/test_evidencia.py
+      - run: python -m pytest -q tests/test_evidencia.py tests/test_identidad.py
       - name: Comprobar las fuentes
         run: |
           set -o pipefail

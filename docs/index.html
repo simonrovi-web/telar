@@ -260,6 +260,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--cy)}
 .claim .acc{gap:4px 10px}
 .claim .acc button,.claim .acc a{font-size:calc(7.5px * var(--k));letter-spacing:.16em;color:var(--txt-faint);padding:2px 0;text-decoration:none;border-bottom:1px dotted var(--line-2)}
 .claim .acc button:hover,.claim .acc a:hover{color:var(--cy)}
+.ident{padding:8px 11px;border-bottom:1px solid var(--line)}
+.ident summary{cursor:pointer;font-size:calc(7.5px * var(--k));letter-spacing:.18em;color:var(--txt-dim)}
+.ident summary:hover{color:var(--cy)} .ident em{font-style:normal} .ident em.si{color:var(--cy)} .ident em.medio{color:var(--am)} .ident em.no{color:var(--rd)}
+.ident .fi{padding:5px 0;font-size:calc(8.5px * var(--k));line-height:1.55;color:var(--txt-dim);overflow-wrap:anywhere}
+.ident .fi b{display:block;font-weight:500;font-size:calc(7.5px * var(--k));letter-spacing:.2em;color:var(--txt-faint)}
+.ident .fi a{color:var(--cy);text-decoration:none;border-bottom:1px dotted var(--cy-soft)} .ident .fi span{display:block;color:var(--txt-faint)}
+.ident p{font-size:calc(8px * var(--k));color:var(--txt-faint)}
 .evid{margin-top:5px;border-left:2px solid var(--line-2);padding-left:8px}
 .evid summary{cursor:pointer;font-size:calc(7.5px * var(--k));letter-spacing:.16em;color:var(--txt-dim);padding:2px 0}
 .evid summary:hover{color:var(--cy)} .evid summary em{font-style:normal;color:var(--am)}
@@ -705,7 +712,7 @@ function inWindow(v){
   if(a!=null&&b==null) hi=yMax==null?a:yMax;
   return hi>=wA && lo<=wB;
 }
-var TA=window.TelarAnalisis, soloRespaldo=false, evid=null;
+var TA=window.TelarAnalisis, soloRespaldo=false, evid=null, ident=null;
 function evidDe(v){ return TA.evidencia(evid,v._id,v); }
 function fechaCl(s){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s||"")); return m?m[3]+"-"+m[2]+"-"+m[1]:""; }
 function activeLink(v){ return dimOn[v.tipo]!==false && provOn[v.registro]!==false && inWindow(v) && (!soloRespaldo || v._fuente || TA.conRespaldo(v)); }
@@ -1335,6 +1342,28 @@ function buscarWeb(q,tipo){
     : "https://duckduckgo.com/?q="+encodeURIComponent(q);
   try{ window.open(u,"_blank","noopener,noreferrer"); }catch(e){ toast("No se pudo abrir la búsqueda.",1); }
 }
+/* Quién es y con quién no confundirla. */
+function seccionIdentidad(b,rec){
+  var i=ident&&ident.personas[sel.key], mia=rec.identidad, d=el("details",{class:"ident"}), ids=i&&i.ids||[];
+  if(!ident&&!mia) return;
+  var ok=ids.some(function(x){ return x.estado==="corroborado"; });
+  d.appendChild(el("summary",{},[document.createTextNode("IDENTIDAD · "),
+    el("em",{class:i?(ok?"si":"medio"):mia?"medio":"no",text:i?(ok?"CORROBORADA FUERA DEL REGISTRO":"SOLO POR LA NÓMINA"):mia?"DECLARADA EN ESTE EQUIPO":"SIN COMPROBAR"})]));
+  function fila(t,nodos){ var f=el("div",{class:"fi"},[el("b",{text:t})]); nodos.forEach(function(n){ f.appendChild(n); }); d.appendChild(f); }
+  function enlace(t,u){ var s=safeUrl(u); return s?el("a",{href:s,target:"_blank",rel:"noopener noreferrer nofollow",text:t}):el("span",{text:t}); }
+  if(i){
+    fila("SALE DE",[enlace(i.nomina.titulo,i.nomina.url)]);
+    fila("SE RECONOCE POR",[el("span",{text:i.nombres.join(" / ")+", junto con "+i.fuertes.join(" o ")})]);
+    ids.forEach(function(x){ fila(x.esquema.toUpperCase(),[enlace(x.id,x.url),el("span",{text:x.estado+(x.por?": "+x.por:"")})]); });
+    if(!ids.length) fila("IDENTIFICADOR",[el("span",{text:"No se encontró uno público que la distinga."})]);
+    var pg=(evid&&evid.identidad||{})[sel.key]||{}, us=Object.keys(pg), bien=us.filter(function(u){ return pg[u].ok; }).length;
+    if(us.length) fila("FUENTES",[el("span",{text:bien+" de "+us.length+(us.length===1?" página comprobada la identifica.":" páginas comprobadas la identifican.")})]);
+    if(i.noConfundir.length) fila("NO CONFUNDIR CON",i.noConfundir.map(function(x){ return el("span",{},[enlace(x.nombre,x.url),document.createTextNode(", "+x.quien)]); }));
+    d.appendChild(el("p",{text:"Selección "+ident.seleccion+"."}));
+  } else if(mia){ fila("SALE DE",[enlace(mia.nomina,mia.nomina)]); fila("SE RECONOCE POR",[el("span",{text:String(mia.distingue||"")})]); }
+  else d.appendChild(el("p",{text:"Nadie ha dicho de qué nómina sale ni qué la distingue de un homónimo."}));
+  b.appendChild(d);
+}
 function renderDossier(){
   var d=$("dossier"), b=$("dsBody");
   if(!sel){ d.hidden=true; return; }
@@ -1388,6 +1417,7 @@ function renderDossier(){
     b.appendChild(caja);
   }
 
+  if(isP) seccionIdentidad(b,rec);
   if(isP && Array.isArray(rec.alias) && rec.alias.length)
     b.appendChild(el("div",{class:"ds-note",text:"También: "+rec.alias.join(", ")}));
   if(rec.resumen) b.appendChild(el("div",{class:"ds-note",text:String(rec.resumen)}));
@@ -1579,7 +1609,7 @@ function aristasActivas(){
 /* ═══════════ verificación: lo que falta comprobar ═══════════ */
 var pendClase="";
 function buildPendientes(body){
-  var todo=TA.pendientes(regActual(),hoyNum(),evid), cl={};
+  var todo=TA.pendientes(regActual(),hoyNum(),evid,ident), cl={};
   todo.forEach(function(t){ cl[t.clase]=(cl[t.clase]||0)+1; });
   body.appendChild(el("div",{class:"hint"},[el("b",{text:"Qué falta comprobar. "}),
     document.createTextNode((evid&&evid.revisado?"Último control de las fuentes: "+fechaCl(evid.revisado)+". ":"")+"Se calcula desde el propio registro, sin modelos: dónde una afirmación se apoya en poco, no tiene fechas o depende de un solo documento. Son tareas, no acusaciones.")]));
@@ -1979,13 +2009,15 @@ function formInvestigar(pref){
       lab("PAÍS",inp("ip","Chile"),"Sirve para ubicarla en el mapa."),
       lab("CIUDAD",inp("ic","opcional"))
     ]));
-    f.appendChild(lab("CARGO O ROL (OPCIONAL)",inp("ir","Si lo sabes: senador, gerente de…, dueño de…"),
+    f.appendChild(lab("CARGO O ROL PÚBLICO",inp("ir","Si lo sabes: senador, gerente de…, dueño de…"),
       "Ayuda a no confundirla con otra persona del mismo nombre. Si no es figura pública, no corresponde abrirle ficha."));
     var ta=el("textarea",{id:"iq",placeholder:"Qué quieres saber: sus directorios, sus aportes de campaña, con quién comparte sociedades…"});
     f.appendChild(lab("QUÉ BUSCAR",ta));
   },function(){
     var n=V("in"), r=V("ir");
     if(!n){ $("sheetErr").textContent="FALTA EL NOMBRE."; return false; }
+    if(!TA.nombreCompleto(n)){ $("sheetErr").textContent="NOMBRE INCOMPLETO: HACE FALTA NOMBRE Y APELLIDO."; return false; }
+    if(!r){ $("sheetErr").textContent="FALTA EL CARGO: SIN ÉL NO SE PUEDE SEPARAR DE UN HOMÓNIMO."; return false; }
     var id=slug(n); if(!id){ $("sheetErr").textContent="ESE NOMBRE NO PRODUCE UN IDENTIFICADOR VÁLIDO."; return false; }
     return db.doc("solicitudes/"+id).set({
       nombre:n, pais:V("ip"), ciudad:V("ic"), rolPublico:r, nota:V("iq"),
@@ -2591,6 +2623,8 @@ function mdDossier(){
     if(n.kind==="p"){
       if(rec.rolPublico) L.push("- **Rol público:** "+rec.rolPublico);
       if(rec.estado) L.push("- **Estado de la ficha:** "+rec.estado);
+      var idn=ident&&ident.personas[n.key];
+      if(idn) L.push("- **Identidad:** "+idn.nomina.titulo+" ("+idn.nomina.url+")"+idn.ids.map(function(x){ return "; "+x.esquema+" "+x.id+" ("+x.estado+")"; }).join(""));
     } else if(rec.tipo) L.push("- **Tipo:** "+rec.tipo);
     var ub=[rec.ciudad,rec.pais].filter(Boolean).join(", ");
     if(ub) L.push("- **Ubicación:** "+ub);
@@ -2685,6 +2719,10 @@ function formPersona(key){
     f.appendChild(lab("NOMBRE",inp("fn","Nombre completo",p.nombre)));
     f.appendChild(lab("ROL PÚBLICO",inp("fr","Senador · Presidente del directorio de…",p.rolPublico),
       "Por qué esta persona entra: solo figuras públicas con rastro en registros públicos."));
+    f.appendChild(lab("NÓMINA DE DONDE SALE",inp("fno","https://… página oficial que la nombra en ese cargo",p.identidad&&p.identidad.nomina),
+      "Un nombre no identifica a nadie. Enlaza la lista o el registro público donde figura."));
+    f.appendChild(lab("QUÉ LA DISTINGUE",inp("fdi","Partido, distrito, empresa: lo que no tendría un homónimo",p.identidad&&p.identidad.distingue),
+      "No escribas RUT, domicilio ni fecha de nacimiento."));
     f.appendChild(el("div",{class:"frow"},[
       lab("PAÍS",inp("fp","Chile",p.pais)),
       lab("ESTADO",sel2("fe",[["en curso","En curso"],["revisada","Revisada"]],p.estado||"en curso"))
@@ -2702,6 +2740,17 @@ function formPersona(key){
     var nombre=V("fn"), rol=V("fr");
     if(!nombre){ $("sheetErr").textContent="FALTA EL NOMBRE."; return false; }
     if(!rol){ $("sheetErr").textContent="FALTA EL ROL PÚBLICO: ES EL REQUISITO DE ADMISIÓN."; return false; }
+    var nomina=safeUrl(V("fno")), distingue=V("fdi"), oficial=key&&ident&&ident.personas[key];
+    if(!key&&!TA.nombreCompleto(nombre)){ $("sheetErr").textContent="NOMBRE INCOMPLETO: HACE FALTA NOMBRE Y APELLIDO."; return false; }
+    if(!oficial&&!nomina){ $("sheetErr").textContent="FALTA EL ENLACE A LA NÓMINA DE DONDE SALE."; return false; }
+    if(!oficial&&distingue.length<3){ $("sheetErr").textContent="FALTA QUÉ LA DISTINGUE DE UN HOMÓNIMO."; return false; }
+    if(/\b\d{1,2}\.?\d{3}\.?\d{3}-?[\dkK]\b/.test(distingue+" "+nombre)){ $("sheetErr").textContent="NO SE GUARDAN RUT."; return false; }
+    if(!key){
+      var parecidas=TA.confundibles(nombre,[...personas.entries()].map(function(x){ return {id:x[0],nombre:x[1].nombre,alias:x[1].alias}; }));
+      if(parecidas.length && formPersona._ya!==nombre){ formPersona._ya=nombre;
+        $("sheetErr").textContent="¿NO ES "+parecidas.map(function(x){ return x.nombre; }).join(" / ").toUpperCase()+"? SI ES OTRA PERSONA, GUARDA DE NUEVO."; return false; }
+      formPersona._ya="";
+    }
     var id=key||slug(nombre);
     if(!id){ $("sheetErr").textContent="ESE NOMBRE NO PRODUCE UN IDENTIFICADOR VÁLIDO."; return false; }
     if(!key&&personas.has(id)){ $("sheetErr").textContent="YA EXISTE UNA FICHA CON ESE NOMBRE."; return false; }
@@ -2712,6 +2761,7 @@ function formPersona(key){
       lat:isNaN(la)?null:la, lon:isNaN(lo)?null:lo,
       alias:V("fa")?V("fa").split(",").map(function(s){return s.trim();}).filter(Boolean):[],
       resumen:V("fs"),estado:V("fe")||"en curso",
+      identidad:nomina||distingue?{nomina:nomina||"",distingue:distingue}:(p.identidad||null),
       creado:p.creado||new Date().toISOString(),actualizado:new Date().toISOString(),por:"visor"
     }).then(function(){ logAccion(key?"editar ficha":"abrir ficha",nombre,rol); });
   });
@@ -2866,6 +2916,9 @@ function finishBoot(){
 
 fetch("data/evidencia.json").then(function(r){ return r.ok?r.json():null; }).then(function(e){
   if(e&&e.vinculos){ evid=e; if(ready.p&&ready.o&&ready.v) refresh(); }
+}).catch(function(){});
+fetch("data/identidad.json").then(function(r){ return r.ok?r.json():null; }).then(function(e){
+  if(e&&e.personas){ ident=e; if(ready.p&&ready.o&&ready.v) refresh(); }
 }).catch(function(){});
 fetch("data/world.json").then(function(r){ return r.ok?r.json():null; }).then(function(w){
   if(w&&w.land){

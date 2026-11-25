@@ -4,7 +4,7 @@
  "revisado": "2026-11-25",
  "documentos": {
   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
-   "estado": "sin respuesta",
+   "estado": "vigente",
    "desde": "2026-11-25",
    "intento": "2026-11-25",
    "comprobado": "2026-11-25"
@@ -16,7 +16,7 @@
    "comprobado": "2026-11-25"
   },
   "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco": {
-   "estado": "sin respuesta",
+   "estado": "vigente",
    "desde": "2026-11-25",
    "intento": "2026-11-25",
    "comprobado": "2026-11-25"
@@ -1455,5 +1455,112 @@
   "luz-granier-bulnes-org-grupo-saesa-directora-independiente-2": "La fuente une Saesa y Entel; la fecha y el papel de independiente solo son claros para Entel.",
   "pinera-blanco-y-negro-2005": "La BCN no repite el año en esta frase: 2005 viene de la anterior. El término, 2009, es el de director.",
   "pinera-rn-militancia": "La frase no da el año de inicio: 1990 se toma de su período como senador."
+ },
+ "identidad": {
+  "alejandro-canut-de-bon-lagos": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "alfredo-moreno-charme": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "bernardo-fontaine-talavera": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "daniel-diaz-olguin": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "eduardo-bitran-colodro": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "luz-granier-bulnes": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "ricardo-alvarez-fuentes": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "ricardo-calderon-galaz": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "tamara-agnic-martinez": {
+   "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  },
+  "sebastian-pinera": {
+   "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.fundacionfuturo.cl/quienes_somos/": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.elmostrador.cl/noticias/pais/2009/09/28/este-es-el-expediente-de-la-svs-que-sanciono-a-pinera-por-la-compra-de-acciones-lan-2/": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   },
+   "https://www.ciperchile.cl/2009/09/29/el-directorio-de-lan-que-se-transformo-en-la-peor-pesadilla-de-pinera/": {
+    "ok": true,
+    "motivo": "",
+    "fecha": "2026-11-25"
+   }
+  }
  }
 }

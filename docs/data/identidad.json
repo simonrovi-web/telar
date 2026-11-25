@@ -1,0 +1,256 @@
+{
+ "nota": "Cómo se reconoce a cada persona y con quién no hay que confundirla. Sin RUT, domicilio ni fecha de nacimiento.",
+ "seleccion": "asistida, sin revisión humana",
+ "revisado": "2026-11-25",
+ "personas": {
+  "alejandro-canut-de-bon-lagos": {
+   "nombres": [
+    "Alejandro Canut de Bon Lagos",
+    "Alejandro Canut de Bon"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [],
+   "fuertes": [
+    "Codelco",
+    "Sonami",
+    "Enami"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "alfredo-moreno-charme": {
+   "nombres": [
+    "Alfredo Moreno Charmé"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [
+    {
+     "esquema": "wikidata",
+     "id": "Q58293",
+     "url": "https://www.wikidata.org/wiki/Q58293",
+     "estado": "corroborado",
+     "por": "Wikipedia (fuente terciaria): nombre con los dos apellidos y su nombramiento en Codelco en abril de 2025"
+    }
+   ],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": [
+    {
+     "nombre": "Alfredo Moreno Cebrián",
+     "quien": "historiador español",
+     "url": "https://www.wikidata.org/wiki/Q107352160"
+    },
+    {
+     "nombre": "Alfredo Moreno Osorio",
+     "quien": "ingeniero y empresario español (1871-1932)",
+     "url": "https://www.wikidata.org/wiki/Q5667878"
+    },
+    {
+     "nombre": "Alfredo David Moreno",
+     "quien": "futbolista argentino",
+     "url": "https://www.wikidata.org/wiki/Q723373"
+    }
+   ]
+  },
+  "bernardo-fontaine-talavera": {
+   "nombres": [
+    "Bernardo Fontaine Talavera",
+    "Bernardo Fontaine"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [
+    {
+     "esquema": "wikidata",
+     "id": "Q108357559",
+     "url": "https://www.wikidata.org/wiki/Q108357559",
+     "estado": "corroborado",
+     "por": "Wikipedia (fuente terciaria): nombre con los dos apellidos y su candidatura a convencional en 2021 y su paso por Citibank"
+    }
+   ],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "daniel-diaz-olguin": {
+   "nombres": [
+    "Daniel Díaz Olguín"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": [
+    {
+     "nombre": "Daniel Díaz",
+     "quien": "ciclista argentino",
+     "url": "https://www.wikidata.org/wiki/Q452551"
+    },
+    {
+     "nombre": "Daniel Díaz, «Cata»",
+     "quien": "futbolista argentino",
+     "url": "https://www.wikidata.org/wiki/Q350270"
+    },
+    {
+     "nombre": "Daniel Diaz",
+     "quien": "boxeador nicaragüense",
+     "url": "https://www.wikidata.org/wiki/Q43379380"
+    }
+   ]
+  },
+  "eduardo-bitran-colodro": {
+   "nombres": [
+    "Eduardo Bitran Colodro",
+    "Eduardo Bitran"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [
+    {
+     "esquema": "wikidata",
+     "id": "Q5819044",
+     "url": "https://www.wikidata.org/wiki/Q5819044",
+     "estado": "sin corroborar",
+     "por": "Wikipedia trae los dos apellidos, pero nada que cruce con los vínculos de este registro"
+    }
+   ],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "luz-granier-bulnes": {
+   "nombres": [
+    "Luz Granier Bulnes",
+    "Luz Granier"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [
+    {
+     "esquema": "wikidata",
+     "id": "Q16595046",
+     "url": "https://www.wikidata.org/wiki/Q16595046",
+     "estado": "corroborado",
+     "por": "Wikipedia (fuente terciaria): nombre con los dos apellidos y la Subsecretaría de Servicios Sociales y Renovación Nacional"
+    }
+   ],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "ricardo-alvarez-fuentes": {
+   "nombres": [
+    "Ricardo Álvarez Fuentes"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "ricardo-calderon-galaz": {
+   "nombres": [
+    "Ricardo Calderón Galaz"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "sebastian-pinera": {
+   "nombres": [
+    "Sebastián Piñera Echenique",
+    "Sebastián Piñera"
+   ],
+   "nomina": {
+    "titulo": "BCN · Reseñas biográficas parlamentarias",
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique"
+   },
+   "ids": [
+    {
+     "esquema": "bcn",
+     "id": "Sebastián_Piñera_Echenique",
+     "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+     "estado": "corroborado",
+     "por": "es la reseña oficial que cita la ficha"
+    },
+    {
+     "esquema": "wikidata",
+     "id": "Q306",
+     "url": "https://www.wikidata.org/wiki/Q306",
+     "estado": "corroborado",
+     "por": "Wikidata enlaza esa misma reseña de la BCN"
+    }
+   ],
+   "fuertes": [
+    "Renovación Nacional",
+    "Bancard",
+    "Presidente de la República",
+    "Fundación Futuro",
+    "LAN"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  },
+  "tamara-agnic-martinez": {
+   "nombres": [
+    "Tamara Agnic Martínez",
+    "Tamara Agnic"
+   ],
+   "nomina": {
+    "titulo": "Codelco · Miembros del directorio",
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio"
+   },
+   "ids": [
+    {
+     "esquema": "wikidata",
+     "id": "Q17993292",
+     "url": "https://www.wikidata.org/wiki/Q17993292",
+     "estado": "corroborado",
+     "por": "Wikipedia (fuente terciaria): nombre con los dos apellidos y su nombramiento en Codelco en abril de 2025"
+    }
+   ],
+   "fuertes": [
+    "Codelco"
+   ],
+   "debiles": [],
+   "noConfundir": []
+  }
+ }
+}

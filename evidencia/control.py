@@ -21,6 +21,8 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
+from identidad.barrera import de_dict, pagina_es_de
+
 RUTA = Path(__file__).resolve().parents[1] / "docs" / "data" / "evidencia.json"
 AGENTE = "Mozilla/5.0 (compatible; investigacion/1.0)"
 _IGNORAR = {"script", "style", "noscript", "template", "svg"}
@@ -106,11 +108,21 @@ def estado_documento(codigo: int, vigentes: int, total: int) -> str:
     return "vigente" if vigentes == total else "cambio"
 
 
-def revisar(ev: dict, bajar=descargar, hoy: str | None = None, espera: float = 1.0) -> list[str]:
-    """Actualiza ``ev`` y devuelve lo que cambió de estado."""
+def revisar(ev: dict, bajar=descargar, hoy: str | None = None, espera: float = 1.0,
+            reg: dict | None = None, ident: dict | None = None) -> list[str]:
+    """Actualiza ``ev`` y devuelve lo que cambió de estado.
+
+    Con ``reg`` e ``ident`` comprueba además que cada página identifique a la
+    persona a la que se atribuye: es la defensa contra los homónimos.
+    """
     hoy = hoy or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     avisos: list[str] = []
     por_url: dict[str, list[dict]] = {}
+    de_quien: dict[str, set[str]] = {}
+    for k, ms in ev["vinculos"].items():
+        for m in ms:
+            if reg and k in reg["vinculos"]:
+                de_quien.setdefault(m["url"], set()).add(reg["vinculos"][k]["personaId"])
     for ms in ev["vinculos"].values():
         for m in ms:
             por_url.setdefault(m["url"], []).append(m)
@@ -128,6 +140,14 @@ def revisar(ev: dict, bajar=descargar, hoy: str | None = None, espera: float = 1
         d.update(estado=est, intento=hoy)
         if codigo == 200:
             d["comprobado"] = hoy
+            for quien in sorted(de_quien.get(url, ())) if ident else ():
+                ficha = ident["personas"].get(quien)
+                v = pagina_es_de(de_dict(ficha), texto_html(html)) if ficha else None
+                ok = bool(v and v.pasa)
+                previo = ev.setdefault("identidad", {}).setdefault(quien, {}).get(url)
+                if previo is None or previo["ok"] is not ok:
+                    avisos.append(f"identidad {'comprobada' if ok else 'NO comprobada'}: {quien} en {url}")
+                ev["identidad"][quien][url] = {"ok": ok, "motivo": v.motivo if v else "sin identidad declarada", "fecha": hoy}
             for m, h in zip(ms, halladas):
                 if m.get("vigente") is not h:
                     m["vigente"] = h
@@ -143,13 +163,17 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     ev = json.loads(RUTA.read_text(encoding="utf-8"))
-    avisos = revisar(ev)
+    reg = json.loads(RUTA.with_name("registro.json").read_text(encoding="utf-8"))
+    ident = json.loads(RUTA.with_name("identidad.json").read_text(encoding="utf-8"))
+    avisos = revisar(ev, reg=reg, ident=ident)
     for url, d in ev["documentos"].items():
         print(f"{d['estado']:14} {url}")
     total = [m for ms in ev["vinculos"].values() for m in ms]
     vistas = [m for m in total if ev["documentos"][m["url"]].get("comprobado") == ev["revisado"]]
     print(f"{sum(m['vigente'] for m in vistas)}/{len(vistas)} frases presentes, de las comprobadas hoy; "
           f"{len(total) - len(vistas)} sin comprobar hoy")
+    ids = [x for p in ev.get("identidad", {}).values() for x in p.values()]
+    print(f"{sum(x['ok'] for x in ids)}/{len(ids)} pares persona-página identificados")
     for a in avisos:
         print("cambio de estado ·", a)
     if not args.seco:

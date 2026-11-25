@@ -105,3 +105,18 @@ test("evidencia: lo deducido y lo perdido quedan a la vista", () => {
   assert.ok(A.pendientes(reg, 20261125, { vinculos: {} }).some(x => x.clase === "SIN FRASE LOCALIZADA"));
   assert.ok(!A.pendientes(reg, 20261125).some(x => /FRASE|DEDUCIDO/.test(x.clase)));
 });
+
+test("identidad: avisa de nombres confundibles sin juntar a los distintos", () => {
+  assert.ok(A.confundible("Simon Rojas", "Simón Rojas Vilches"));
+  assert.ok(A.confundible("Sebastián Piñera", "Sebastian Pinera Echenique"));
+  assert.ok(A.confundible("Eduardo Bitrán Colodro", "Eduardo Bitram Colodro"));
+  assert.ok(!A.confundible("Ricardo Álvarez Fuentes", "Ricardo Calderón Galaz"));
+  assert.ok(!A.confundible("Luz", "Luz Granier Bulnes"));
+  assert.ok(!A.nombreCompleto("Simon") && !A.nombreCompleto("Simon R") && A.nombreCompleto("Simon Rojas"));
+  const reg = { personas: { p: { nombre: "P Q" } }, organizaciones: {}, vinculos: {} };
+  const cl = (i, e) => A.pendientes(reg, 20261125, e, i).map(x => x.clase);
+  assert.deepEqual(cl({ personas: {} }), ["SIN IDENTIDAD COMPROBADA"]);
+  assert.deepEqual(cl({ personas: { p: { ids: [] } } }), ["SIN IDENTIFICADOR EXTERNO"]);
+  assert.deepEqual(cl({ personas: { p: { ids: [{ estado: "corroborado" }] } } }, { identidad: { p: { "https://x.cl": { ok: false, motivo: "m" } } } }), ["LA PÁGINA NO LA IDENTIFICA"]);
+  assert.deepEqual(A.confundibles("Ana Prueba", [{ id: 1, nombre: "Otra Cosa", alias: ["Ana Prueba Soto"] }]).length, 1);
+});

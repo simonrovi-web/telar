@@ -130,6 +130,26 @@
       .filter(function (x) { return x.c > 0; }).sort(function (x, y) { return y.c - x.c; });
   }
 
+  /* ── personas: ¿podrían ser la misma, o confundirse? */
+  function distancia(a, b) {
+    var f = [], i, j;
+    for (j = 0; j <= b.length; j++) f[j] = j;
+    for (i = 1; i <= a.length; i++) { var ant = f[0]; f[0] = i;
+      for (j = 1; j <= b.length; j++) { var t = f[j]; f[j] = Math.min(f[j] + 1, f[j - 1] + 1, ant + (a[i - 1] === b[j - 1] ? 0 : 1)); ant = t; } }
+    return f[b.length];
+  }
+  function confundible(x, y) {
+    var A = norm(x).split(" ").filter(Boolean), B = norm(y).split(" ").filter(Boolean);
+    if (!A.length || !B.length) return false;
+    var corto = A.length <= B.length ? A : B, largo = corto === A ? B : A;
+    if (corto.length >= 2 && corto.every(function (t) { return largo.indexOf(t) >= 0; })) return true;
+    return A.length >= 2 && B.length >= 2 && A.length === B.length && distancia(A.join(" "), B.join(" ")) <= 2;
+  }
+  function confundibles(nombre, lista) {
+    return lista.filter(function (p) { return confundible(nombre, p.nombre) || (p.alias || []).some(function (a) { return confundible(nombre, a); }); });
+  }
+  function nombreCompleto(s) { return norm(s).split(" ").filter(function (t) { return t.length > 1; }).length >= 2; }
+
   /* ── nombres que podrían ser la misma organización. Solo sugiere. */
   var VACIAS = /^(de|del|la|las|los|el|y|e|sa|spa|ltda|limitada|s|a|chile|chilena|nacional|republica)$/;
   function piezas(s) { return norm(s).split(" ").filter(function (t) { return t && !VACIAS.test(t); }); }
@@ -163,8 +183,15 @@
     var s = m.salto || [];
     return !s[0] ? m.url : m.url.split("#")[0] + "#:~:text=" + c(s[0]) + (s[1] ? "," + c(s[1]) : "");
   }
-  function pendientes(reg, hoy, ev) {
+  function pendientes(reg, hoy, ev, ident) {
     var out = [], doc = {};
+    if (ident && ident.personas) Object.keys(reg.personas).forEach(function (k) {
+      var p = reg.personas[k], i = ident.personas[k], x = (ev && ev.identidad || {})[k] || {};
+      function pon(clase, pide, u) { out.push({ clase: clase, persona: k, texto: p.nombre + (u ? " · " + dominio(u) : ""), pide: pide }); }
+      if (!i && !p.identidad) return pon("SIN IDENTIDAD COMPROBADA", "Decir de qué nómina sale y qué la distingue de un homónimo.");
+      if (i && !(i.ids || []).some(function (d) { return d.estado === "corroborado"; })) pon("SIN IDENTIFICADOR EXTERNO", "Buscar un identificador público que se pueda corroborar.");
+      Object.keys(x).forEach(function (u) { if (!x[u].ok) pon("LA PÁGINA NO LA IDENTIFICA", "Comprobar que no hable de otra persona: " + x[u].motivo + ".", u); });
+    });
     Object.keys(reg.vinculos).forEach(function (k) {
       var v = reg.vinculos[k], r = respaldo(v), p = reg.personas[v.personaId];
       var cp = String(v.contraparte || ""), id = cp.slice(cp.indexOf(":") + 1);
@@ -247,5 +274,5 @@
 
   return { norm: norm, dominio: dominio, casa: casa, respaldo: respaldo, conRespaldo: conRespaldo, rango: rango, solapan: solapan,
     tiempoComun: tiempoComun, caminos: caminos, eslabonDebil: eslabonDebil, puentes: puentes, posiblesDuplicados: posiblesDuplicados,
-    evidencia: evidencia, saltoA: saltoA, pendientes: pendientes, buscar: buscar, csv: csv, gexf: gexf };
+    confundible: confundible, confundibles: confundibles, nombreCompleto: nombreCompleto, evidencia: evidencia, saltoA: saltoA, pendientes: pendientes, buscar: buscar, csv: csv, gexf: gexf };
 });

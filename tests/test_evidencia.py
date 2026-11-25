@@ -49,6 +49,18 @@ def test_el_control_anota_sin_olvidar():
     assert revisar(ev, lambda u: (200, "<p>otra cosa</p>"), "2026-01-22", 0) == [] and ev["vinculos"] == antes
 
 
+def test_el_control_comprueba_de_quien_habla_la_pagina():
+    reg = {"vinculos": {"v": {"personaId": "p"}}}
+    ident = {"personas": {"p": {"nombres": ["Ana Prueba"], "nomina": {"url": "https://n.cl"}, "fuertes": ["Fundación Imaginaria"]}}}
+    ev = {"documentos": {}, "vinculos": {"v": [{"url": "https://x.cl", "cubre": ["papel"], **marcar(FRASE)}]}}
+    revisar(ev, lambda u: (200, "<p>" + FRASE + "</p>"), "2026-01-01", 0, reg, ident)
+    assert ev["identidad"]["p"]["https://x.cl"]["ok"] is True
+    avisos = revisar(ev, lambda u: (200, "<p>Ana Prueba vende flores.</p>"), "2026-01-08", 0, reg, ident)
+    assert ev["identidad"]["p"]["https://x.cl"]["ok"] is False and any("NO comprobada" in a for a in avisos)
+    revisar(ev, lambda u: (403, ""), "2026-01-15", 0, reg, ident)
+    assert ev["identidad"]["p"]["https://x.cl"]["fecha"] == "2026-01-08"
+
+
 def test_cada_afirmacion_tiene_frase_de_una_fuente_que_cita():
     assert set(EV["vinculos"]) == set(REG["vinculos"])
     for k, ms in EV["vinculos"].items():

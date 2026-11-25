@@ -26,3 +26,4 @@ jobs:
       - run: python -m pyflakes telar_motor tests
       - run: python -m pytest -q
       - run: node --test tests/analisis.test.js
+      - run: python -m identidad.barrera
