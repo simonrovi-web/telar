@@ -423,6 +423,8 @@ button.tarea:hover b{color:var(--cy)}
 @media (max-width:980px){
   .met:nth-child(n+5){display:none}
   .panel,.dossier{width:calc(100vw - 2 * var(--side))}
+  /* aquí se tapan: queda encima lo último que se abrió */
+  .panel-arriba .panel{z-index:41}
   .legend{display:none}
 }
 @media (max-width:700px){
@@ -1278,7 +1280,7 @@ function centerOn(n){
   else { camG.x=n.x; camG.y=n.y; updZoom(); draw(); }
 }
 function select(n){
-  sel=n; selHud();
+  sel=n; document.body.classList.remove("panel-arriba"); selHud();
   if(n && MODE==="mapa" && n.ll) flyTo(n.ll[0],n.ll[1],Math.max(camM.z,6));
   if(n){ location.hash = (n.kind==="p"?"#p-":"#o-")+n.key; }
   else if(location.hash) location.hash="";
@@ -1360,12 +1362,12 @@ function filaCambio(e,conFicha){
     el("span",{text:(e.campos?"Cambió: "+e.campos.map(function(c){ return NOM_CAMPO[c]||c; }).join(", ")+". ":"")+e.motivo+" — "+e.quien+(e.rectificacion?" · solicitud "+e.rectificacion:"")})]);
 }
 function seccionHistorial(b){
+  if(contacto&&!window.TELAR_OPEN) b.appendChild(el("button",{class:"mini",style:"width:100%;margin-top:6px",type:"button",text:"PEDIR UNA CORRECCIÓN DE ESTA FICHA",onclick:function(){ pedirCorreccion(null); }}));
   if(!hist) return;
   var es=TA.cambiosDe(hist,function(e){ return e.ficha===sel.key; }); if(!es.length) return;
   var d=el("details",{class:"ident"});
   d.appendChild(el("summary",{},[document.createTextNode("HISTORIAL · "+es.length+(es.length===1?" ANOTACIÓN":" ANOTACIONES"))]));
   es.forEach(function(e){ d.appendChild(filaCambio(e,false)); });
-  if(contacto&&!window.TELAR_OPEN) d.appendChild(el("button",{class:"mini",style:"width:100%;margin-top:6px",type:"button",text:"PEDIR UNA CORRECCIÓN DE ESTA FICHA",onclick:function(){ pedirCorreccion(null); }}));
   b.appendChild(d);
 }
 function buildHistorial(body){
@@ -1410,10 +1412,10 @@ function mostrarSolicitud(t,ficha){
     var c=el("div",{class:"antool"});
     c.appendChild(el("p",{class:"d",text:"Todavía no se ha enviado. Revísala y elige cómo mandarla."}));
     c.appendChild(el("pre",{style:"white-space:pre-wrap;overflow-wrap:anywhere;font-size:calc(8.5px * var(--k));line-height:1.6;color:var(--txt);border:1px solid var(--line);padding:8px;margin-bottom:8px",text:t}));
-    var u=contacto.tipo==="correo"?"mailto:"+contacto.valor+"?subject="+encodeURIComponent("Corrección en Telar")+"&body="+encodeURIComponent(t):contacto.valor;
+    var u=contacto.tipo==="correo"?"mailto:"+contacto.valor+"?subject="+encodeURIComponent("Corrección en Telar")+"&body="+encodeURIComponent(t.replace(/\n/g,"\r\n")):contacto.valor;
     c.appendChild(el("a",{class:"mini go",style:"display:block;text-align:center;text-decoration:none;margin-bottom:5px",href:u,target:contacto.tipo==="correo"?"_self":"_blank",rel:"noopener noreferrer",
       text:contacto.tipo==="correo"?"ABRIR MI CORREO":"ABRIR EL CANAL PRIVADO"}));
-    if(contacto.tipo==="enlace") c.appendChild(el("p",{class:"d",text:"Copia el texto y pégalo allí."}));
+    c.appendChild(el("p",{class:"d",style:"overflow-wrap:anywhere",text:contacto.tipo==="correo"?"Si no se abre tu correo, copia el texto y envíalo a "+contacto.valor+". Quien administra Telar verá la dirección desde la que escribes.":"Copia el texto y pégalo allí."}));
     c.appendChild(el("button",{class:"mini",style:"width:100%;margin-bottom:5px",type:"button",text:"COPIAR EL TEXTO",onclick:function(){ copiar(t,"Solicitud copiada. Falta enviarla."); }}));
     c.appendChild(el("button",{class:"mini",style:"width:100%",type:"button",text:"GUARDAR UNA COPIA",onclick:function(){ bajar("telar-solicitud-"+new Date().toISOString().slice(0,10)+".txt",t,"text/plain"); }}));
     body.appendChild(c);
@@ -1882,12 +1884,13 @@ function buildAnalisis(body){
 /* ═══════════ paneles ═══════════ */
 var panelMode=null;
 function openPanel(mode,title,build){
+  if(panelMode!==mode||mode==="soli") document.body.classList.add("panel-arriba");
   panelMode=mode; $("panelTitle").textContent=title;
   var body=$("panelBody"); clr(body); build(body);
   $("panel").hidden=false; syncRail();
 }
 function closePanel(){ if(panelMode==="analisis"){ pathNodes=null; pathEdges=null; draw(); }
-  panelMode=null; $("panel").hidden=true; syncRail(); }
+  panelMode=null; $("panel").hidden=true; document.body.classList.remove("panel-arriba"); syncRail(); }
 $("panelClose").onclick=closePanel;
 function togglePanel(mode,title,build){ if(panelMode===mode) closePanel(); else openPanel(mode,title,build); }
 
