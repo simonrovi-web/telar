@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="34" fill="#04070c"/>
+  <circle cx="100" cy="100" r="62" fill="none" stroke="#34dfe8" stroke-width="2.6" opacity=".5"/>
+  <circle cx="100" cy="100" r="53" fill="none" stroke="#1d8f98" stroke-width="1.4" opacity=".35"/>
+  <g clip-path="url(#cl)"><path d="M66 54V146" stroke="#1d8f98" stroke-width="2.4" opacity=".55"/><path d="M83 54V146" stroke="#1d8f98" stroke-width="2.4" opacity=".55"/><path d="M100 54V146" stroke="#1d8f98" stroke-width="2.4" opacity=".55"/><path d="M117 54V146" stroke="#1d8f98" stroke-width="2.4" opacity=".55"/><path d="M134 54V146" stroke="#1d8f98" stroke-width="2.4" opacity=".55"/><path d="M56 70 Q78 77 100 70 T144 70" fill="none" stroke="#34dfe8" stroke-width="3.4" stroke-linecap="round"/><path d="M56 85 Q78 78 100 85 T144 85" fill="none" stroke="#34dfe8" stroke-width="3.4" stroke-linecap="round"/><path d="M56 100 Q78 107 100 100 T144 100" fill="none" stroke="#34dfe8" stroke-width="3.4" stroke-linecap="round"/><path d="M56 115 Q78 108 100 115 T144 115" fill="none" stroke="#34dfe8" stroke-width="3.4" stroke-linecap="round"/><path d="M56 130 Q78 137 100 130 T144 130" fill="none" stroke="#34dfe8" stroke-width="3.4" stroke-linecap="round"/></g>
+  <defs><clipPath id="cl"><circle cx="100" cy="100" r="58"/></clipPath></defs>
+</svg>

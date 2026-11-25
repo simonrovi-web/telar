@@ -1,0 +1,38 @@
+{
+ "name": "Telar · Registro de influencia",
+ "short_name": "Telar",
+ "description": "Estación de análisis de vínculos de figuras públicas: cargos, empresas, dinero político, afiliaciones y vínculos personales, cada uno con su fuente.",
+ "lang": "es",
+ "start_url": "./",
+ "scope": "./",
+ "id": "/telar/",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#04070c",
+ "theme_color": "#04070c",
+ "categories": [
+  "education",
+  "news",
+  "productivity"
+ ],
+ "icons": [
+  {
+   "src": "icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

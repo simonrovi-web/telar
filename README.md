@@ -1,4 +1,16 @@
-# Telar · motor
+# Telar
+
+Registro de influencia de figuras públicas, con la fuente de cada afirmación.
+
+**App:** https://simonrovi-web.github.io/telar/
+
+- `docs/` es la app que publica GitHub Pages. Abre en modo lectura; `?taller` permite editar en el propio navegador, con Gemma 4 (Apache 2.0) para generar pistas sin verificar.
+- `docs/data/registro.json` es el registro publicado.
+- `telar_motor/` es el motor de investigación documental, descrito abajo.
+
+Toda la IA de Telar es de pesos abiertos con licencia libre.
+
+## Telar · motor
 
 Motor de investigación documental en español que corre en tu propio equipo. Lee decretos, contratos, notas de prensa e informes; extrae personas, organizaciones, lugares, fechas, documentos y montos con sus relaciones; los guarda en un archivo SQLite y responde preguntas con un agente que **cita la fuente exacta de cada afirmación**.
 
