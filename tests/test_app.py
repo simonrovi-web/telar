@@ -47,3 +47,10 @@ def test_instalable_y_disponible_sin_red():
     assert {"./", "index.html", "analisis.js", "telar-open.js", "data/registro.json", "data/world.json"} <= set(base)
     for f in base:  # un archivo que falte abortaría la instalación entera
         assert f == "./" or (DOCS / f).is_file(), f
+
+
+def test_revisada_solo_si_la_reviso_una_persona():
+    r = json.loads((DOCS / "data" / "registro.json").read_text(encoding="utf-8"))
+    for k, p in r["personas"].items():
+        if p["estado"] == "revisada":
+            assert p.get("revisadaPor") and p["revisadaPor"] not in ("claude", "flujo", "tarea", "telar_motor"), k
