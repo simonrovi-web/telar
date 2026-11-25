@@ -147,7 +147,9 @@ def main() -> int:
     for url, d in ev["documentos"].items():
         print(f"{d['estado']:14} {url}")
     total = [m for ms in ev["vinculos"].values() for m in ms]
-    print(f"{sum(m.get('vigente') is True for m in total)}/{len(total)} frases presentes en su fuente")
+    vistas = [m for m in total if ev["documentos"][m["url"]].get("comprobado") == ev["revisado"]]
+    print(f"{sum(m['vigente'] for m in vistas)}/{len(vistas)} frases presentes, de las comprobadas hoy; "
+          f"{len(total) - len(vistas)} sin comprobar hoy")
     for a in avisos:
         print("cambio de estado ·", a)
     if not args.seco:
