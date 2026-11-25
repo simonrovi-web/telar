@@ -120,3 +120,18 @@ test("identidad: avisa de nombres confundibles sin juntar a los distintos", () =
   assert.deepEqual(cl({ personas: { p: { ids: [{ estado: "corroborado" }] } } }, { identidad: { p: { "https://x.cl": { ok: false, motivo: "m" } } } }), ["LA PÁGINA NO LA IDENTIFICA"]);
   assert.deepEqual(A.confundibles("Ana Prueba", [{ id: 1, nombre: "Otra Cosa", alias: ["Ana Prueba Soto"] }]).length, 1);
 });
+
+test("rectificación: el dato en revisión no cuenta como respaldado", () => {
+  const v = { _id: "k", personaId: "p", registro: "registro", fuentes: f("https://bcn.cl") };
+  const r = (o) => ({ solicitudes: [{ numero: "R-2026-001", estado: "en revisión", ...o }] });
+  assert.equal(A.conRespaldo(v), true);
+  assert.equal(A.conRespaldo(v, r({ vinculos: ["k"] })), false);
+  assert.equal(A.conRespaldo(v, r({ vinculos: ["otro"], ficha: "p" })), true);
+  assert.equal(A.conRespaldo(v, r({ ficha: "p" })), false);
+  assert.equal(A.conRespaldo(v, r({ ficha: "p", estado: "rechazada" })), true);
+  assert.deepEqual(A.canal({ tipo: "correo", valor: "a@b.cl" }), { tipo: "correo", valor: "a@b.cl" });
+  for (const c of [null, { tipo: "", valor: "" }, { tipo: "correo", valor: "a@b" }, { tipo: "correo", valor: 'a"@b.cl' }, { tipo: "enlace", valor: "javascript:alert(1)" }, { tipo: "enlace", valor: "http://x.cl" }])
+    assert.equal(A.canal(c), null);
+  assert.ok(A.solicitud({ ficha: "F", enlace: "E", dato: "D", problema: "P", fecha: "2026-11-25" }).includes("Qué está mal: P"));
+  assert.deepEqual(A.cambiosDe({ entradas: [{ n: 1, ficha: "p" }, { n: 2, ficha: "p" }, { n: 3 }] }, e => e.ficha === "p").map(e => e.n), [2, 1]);
+});

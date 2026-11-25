@@ -712,10 +712,10 @@ function inWindow(v){
   if(a!=null&&b==null) hi=yMax==null?a:yMax;
   return hi>=wA && lo<=wB;
 }
-var TA=window.TelarAnalisis, soloRespaldo=false, evid=null, ident=null;
+var TA=window.TelarAnalisis, soloRespaldo=false, evid=null, ident=null, hist=null, rect=null, contacto=null;
 function evidDe(v){ return TA.evidencia(evid,v._id,v); }
 function fechaCl(s){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s||"")); return m?m[3]+"-"+m[2]+"-"+m[1]:""; }
-function activeLink(v){ return dimOn[v.tipo]!==false && provOn[v.registro]!==false && inWindow(v) && (!soloRespaldo || v._fuente || TA.conRespaldo(v)); }
+function activeLink(v){ return dimOn[v.tipo]!==false && provOn[v.registro]!==false && inWindow(v) && (!soloRespaldo || v._fuente || TA.conRespaldo(v,rect)); }
 function copiar(t,ok){
   try{ navigator.clipboard.writeText(t).then(function(){ toast(ok); },function(){ toast("El navegador no dejó copiar.",1); }); }
   catch(e){ toast("El navegador no dejó copiar.",1); }
@@ -1309,6 +1309,11 @@ function claimEl(v, fromPersona){
   S.slice(0,3).forEach(function(s,i){ ac.appendChild(el("a",{href:"https://web.archive.org/web/*/"+s[1],target:"_blank",rel:"noopener noreferrer nofollow",
     title:"Copias guardadas de "+hostOf(s[1]),text:"ARCHIVO"+(S.length>1?" "+(i+1):"")})); });
   box.appendChild(ac);
+  var abierta=TA.enRevision(rect,v);
+  if(abierta) ac.insertBefore(el("span",{class:"resp r0",title:"Hay una solicitud de corrección abierta sobre este dato.",text:"EN REVISIÓN · "+abierta.numero}),ac.firstChild);
+  var corr=TA.cambiosDe(hist,function(e){ return e.coleccion==="vinculos"&&e.id===v._id&&e.accion==="cambio"; })[0];
+  if(corr) ac.appendChild(el("span",{title:corr.motivo,style:"font-size:calc(7.5px * var(--k));color:var(--txt-faint)",text:"CORREGIDO EL "+fechaCl(corr.fecha)}));
+  if(contacto&&v._id&&!window.TELAR_OPEN) ac.appendChild(el("button",{type:"button",text:"PEDIR CORRECCIÓN",onclick:function(){ pedirCorreccion(v); }}));
   var ev=evidDe(v);
   if(ev.hay){
     var caja=el("details",{class:"evid"});
@@ -1341,6 +1346,78 @@ function buscarWeb(q,tipo){
     : tipo==="registro" ? "https://duckduckgo.com/?q="+encodeURIComponent(q+" (registro OR directorio OR memoria OR declaración OR boletín oficial)")
     : "https://duckduckgo.com/?q="+encodeURIComponent(q);
   try{ window.open(u,"_blank","noopener,noreferrer"); }catch(e){ toast("No se pudo abrir la búsqueda.",1); }
+}
+/* ═══════════ historial y rectificación ═══════════ */
+var NOM_ACC={alta:"ALTA",cambio:"CORRECCIÓN",retiro:"RETIRO"}, NOM_CAMPO={etiqueta:"papel",desde:"inicio",hasta:"término",detalle:"detalle",estado:"estado",
+  fuentes:"fuentes",registro:"procedencia",rolPublico:"rol público",resumen:"reseña",nombre:"nombre",alias:"otros nombres",contraparte:"organización",tipo:"dimensión",monto:"monto"};
+function filaCambio(e,conFicha){
+  var v=e.coleccion==="vinculos"&&e.id?vincs.filter(function(x){ return x._id===e.id; })[0]:null, t=[];
+  if(conFicha&&e.ficha&&personas.has(e.ficha)) t.push(personas.get(e.ficha).nombre);
+  if(v) t.push(nameOf(v.contraparte));
+  if(e.vinculos!=null) t.push(e.vinculos+(e.vinculos===1?" vínculo":" vínculos"));
+  if(e.cuantos!=null) t.push(e.cuantos+" retirado"+(e.cuantos===1?"":"s"));
+  return el("div",{class:"tarea"},[el("b",{text:fechaCl(e.fecha)+" · "+(NOM_ACC[e.accion]||e.accion)+(t.length?" · "+t.join(" · "):"")}),
+    el("span",{text:(e.campos?"Cambió: "+e.campos.map(function(c){ return NOM_CAMPO[c]||c; }).join(", ")+". ":"")+e.motivo+" — "+e.quien+(e.rectificacion?" · solicitud "+e.rectificacion:"")})]);
+}
+function seccionHistorial(b){
+  if(!hist) return;
+  var es=TA.cambiosDe(hist,function(e){ return e.ficha===sel.key; }); if(!es.length) return;
+  var d=el("details",{class:"ident"});
+  d.appendChild(el("summary",{},[document.createTextNode("HISTORIAL · "+es.length+(es.length===1?" ANOTACIÓN":" ANOTACIONES"))]));
+  es.forEach(function(e){ d.appendChild(filaCambio(e,false)); });
+  if(contacto&&!window.TELAR_OPEN) d.appendChild(el("button",{class:"mini",style:"width:100%;margin-top:6px",type:"button",text:"PEDIR UNA CORRECCIÓN DE ESTA FICHA",onclick:function(){ pedirCorreccion(null); }}));
+  b.appendChild(d);
+}
+function buildHistorial(body){
+  body.appendChild(el("div",{class:"hint"},[el("b",{text:"Qué cambió y por qué. "}),
+    document.createTextNode("Cada cambio del registro publicado lleva fecha, motivo y autor. Se dice qué campo cambió, no qué decía antes: repetir el dato viejo anularía la corrección. Lo retirado se cuenta sin nombrarlo.")]));
+  var caja=el("div",{class:"antool"}), ss=(rect&&rect.solicitudes||[]).slice().reverse();
+  if(contacto&&!window.TELAR_OPEN){ caja.appendChild(el("h5",{text:"CORRECCIONES"}));
+    caja.appendChild(el("p",{class:"d",text:"Si un dato sobre ti o sobre alguien está mal, abre la ficha y usa PEDIR CORRECCIÓN, o escribe aquí. La solicitud es privada: se publica la respuesta, nunca quién pidió."}));
+    caja.appendChild(el("button",{class:"mini go",style:"width:100%;margin-bottom:8px",type:"button",text:"PEDIR UNA CORRECCIÓN",onclick:function(){ pedirCorreccion(null); }})); }
+  if(ss.length){ caja.appendChild(el("h5",{text:"SOLICITUDES · "+ss.length}));
+    ss.forEach(function(s){ caja.appendChild(el("div",{class:"tarea"},[el("b",{text:s.numero+" · "+s.estado.toUpperCase()}),
+      el("span",{text:"Recibida el "+fechaCl(s.recibida)+(s.respondida?", respondida el "+fechaCl(s.respondida):"")+". "+(s.asunto||"")+(s.respuesta?" Respuesta: "+s.respuesta:"")})])); }); }
+  var es=TA.cambiosDe(hist,function(){ return true; });
+  caja.appendChild(el("h5",{style:"margin-top:6px",text:"CAMBIOS · "+es.length}));
+  es.slice(0,200).forEach(function(e){ caja.appendChild(filaCambio(e,true)); });
+  if(!es.length) caja.appendChild(el("p",{class:"d",text:"Sin historial disponible."}));
+  body.appendChild(caja);
+}
+function pedirCorreccion(v){
+  if(!contacto) return;
+  var n=v?nodeBy.get("persona:"+v.personaId):sel, ficha=n?n.label:"Registro en general", enl=n&&n.kind!=="d"?enlaceFicha(n):location.origin+location.pathname;
+  openSheet("PEDIR UNA CORRECCIÓN",function(f){
+    f.appendChild(el("div",{class:"tip",style:"margin:8px 0;line-height:1.6",text:"Telar no guarda ni envía esto: arma el texto y tú lo mandas. No escribas RUT, domicilio ni datos de salud. Se publicará la respuesta, nunca tu nombre."}));
+    f.appendChild(el("div",{class:"tip",style:"margin-bottom:8px",text:"Ficha: "+ficha}));
+    f.appendChild(lab("QUÉ DATO",inp("rqd","El dato tal como aparece",v?(v.etiqueta||v.tipo)+" · "+nameOf(v.contraparte)+" ("+spanTxt(v)+")":"")));
+    var ta=el("textarea",{id:"rqp",placeholder:"Qué está mal: no soy yo, la fecha es otra, ya no ocupo ese cargo…"});
+    f.appendChild(lab("QUÉ ESTÁ MAL",ta));
+    f.appendChild(lab("CÓMO DEBERÍA DECIR",inp("rqc","opcional")));
+    f.appendChild(lab("FUENTE QUE LO RESPALDA",inp("rqf","https://… opcional")));
+    f.appendChild(lab("TU RELACIÓN CON LA PERSONA",inp("rqr","Soy yo, la represento, soy lector… opcional")));
+  },function(){
+    var dato=V("rqd"), prob=V("rqp"), fu=V("rqf");
+    if(!dato){ $("sheetErr").textContent="DI QUÉ DATO."; return false; }
+    if(prob.length<8){ $("sheetErr").textContent="DI QUÉ ESTÁ MAL."; return false; }
+    if(fu&&!safeUrl(fu)){ $("sheetErr").textContent="LA FUENTE DEBE SER UN ENLACE HTTP O HTTPS."; return false; }
+    var t=TA.solicitud({ficha:ficha,enlace:enl,dato:dato,problema:prob,propuesta:V("rqc"),fuente:fu,relacion:V("rqr"),fecha:new Date().toISOString().slice(0,10)});
+    mostrarSolicitud(t,ficha); return true;
+  },"PREPARAR SOLICITUD");
+}
+function mostrarSolicitud(t,ficha){
+  openPanel("soli","TU SOLICITUD",function(body){
+    var c=el("div",{class:"antool"});
+    c.appendChild(el("p",{class:"d",text:"Todavía no se ha enviado. Revísala y elige cómo mandarla."}));
+    c.appendChild(el("pre",{style:"white-space:pre-wrap;overflow-wrap:anywhere;font-size:calc(8.5px * var(--k));line-height:1.6;color:var(--txt);border:1px solid var(--line);padding:8px;margin-bottom:8px",text:t}));
+    var u=contacto.tipo==="correo"?"mailto:"+contacto.valor+"?subject="+encodeURIComponent("Corrección en Telar")+"&body="+encodeURIComponent(t):contacto.valor;
+    c.appendChild(el("a",{class:"mini go",style:"display:block;text-align:center;text-decoration:none;margin-bottom:5px",href:u,target:contacto.tipo==="correo"?"_self":"_blank",rel:"noopener noreferrer",
+      text:contacto.tipo==="correo"?"ABRIR MI CORREO":"ABRIR EL CANAL PRIVADO"}));
+    if(contacto.tipo==="enlace") c.appendChild(el("p",{class:"d",text:"Copia el texto y pégalo allí."}));
+    c.appendChild(el("button",{class:"mini",style:"width:100%;margin-bottom:5px",type:"button",text:"COPIAR EL TEXTO",onclick:function(){ copiar(t,"Solicitud copiada. Falta enviarla."); }}));
+    c.appendChild(el("button",{class:"mini",style:"width:100%",type:"button",text:"GUARDAR UNA COPIA",onclick:function(){ bajar("telar-solicitud-"+new Date().toISOString().slice(0,10)+".txt",t,"text/plain"); }}));
+    body.appendChild(c);
+  });
 }
 /* Quién es y con quién no confundirla. */
 function seccionIdentidad(b,rec){
@@ -1418,6 +1495,7 @@ function renderDossier(){
   }
 
   if(isP) seccionIdentidad(b,rec);
+  if(isP) seccionHistorial(b);
   if(isP && Array.isArray(rec.alias) && rec.alias.length)
     b.appendChild(el("div",{class:"ds-note",text:"También: "+rec.alias.join(", ")}));
   if(rec.resumen) b.appendChild(el("div",{class:"ds-note",text:String(rec.resumen)}));
@@ -1882,7 +1960,7 @@ function buildCapas(body){
     row.appendChild(el("span",{class:"ct",text:String(n)}));
     body.appendChild(row);
   });
-  body.appendChild(el("div",{class:"grp"},[el("span",{text:"RESPALDO"}),el("span",{text:String(vincs.filter(TA.conRespaldo).length)})]));
+  body.appendChild(el("div",{class:"grp"},[el("span",{text:"RESPALDO"}),el("span",{text:String(vincs.filter(function(v){ return TA.conRespaldo(v,rect); }).length)})]));
   var rowR=el("button",{class:"row"+(soloRespaldo?" on":""),type:"button",onclick:function(){
     soloRespaldo=!soloRespaldo; rowR.className="row"+(soloRespaldo?" on":"");
     selHud(); renderLegend(); renderDossier(); drawTl(); draw(); renderMetrics(); }});
@@ -2169,7 +2247,7 @@ function buildDoctrina(body){
   body.appendChild(d);
 }
 function syncRail(){
-  [["rBuscar","entidades"],["rCapas","capas"],["rDoc","ontologia"],["rTeo","teorias"],["rCola","cola"],["rAnal","analisis"],["rAcc","acciones"],["rCrono","crono"],["rApp","app"],["rPend","pend"],["rExp","exp"],["rZoom","zoom"]].forEach(function(p){
+  [["rBuscar","entidades"],["rCapas","capas"],["rDoc","ontologia"],["rTeo","teorias"],["rCola","cola"],["rAnal","analisis"],["rAcc","acciones"],["rCrono","crono"],["rApp","app"],["rPend","pend"],["rExp","exp"],["rZoom","zoom"],["rHist","hist"]].forEach(function(p){
     var b=$(p[0]); if(b) b.classList.toggle("on", panelMode===p[1]);
   });
 }
@@ -2254,6 +2332,8 @@ function buildRails(){
     function(){ togglePanel("analisis","ANÁLISIS",buildAnalisis); }));
   L.appendChild(railBtn("rPend","VERIFICACIÓN: QUÉ FALTA COMPROBAR",["M9 4h6v3H9z","M7 5H5v15h14V5h-2","M8.5 13.5l2.5 2.5 4.5-5"],
     function(){ togglePanel("pend","VERIFICACIÓN",buildPendientes); }));
+  L.appendChild(railBtn("rHist","HISTORIAL Y CORRECCIONES",["M4 12a8 8 0 1 0 2.6-5.9","M4 4v4h4","M12 8v4l3 2"],
+    function(){ togglePanel("hist","HISTORIAL",buildHistorial); }));
   var bq=railBtn("rCola","SOLICITUDES DE INVESTIGACIÓN",["M12 8v5l3 2","M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"],
     function(){ togglePanel("cola","SOLICITUDES",buildCola); });
   var pend=solics.filter(function(s){ return s.estado!=="lista"; }).length;
@@ -2624,6 +2704,8 @@ function mdDossier(){
       if(rec.rolPublico) L.push("- **Rol público:** "+rec.rolPublico);
       if(rec.estado) L.push("- **Estado de la ficha:** "+rec.estado);
       var idn=ident&&ident.personas[n.key];
+      var corrs=TA.cambiosDe(hist,function(e){ return e.ficha===n.key&&e.accion==="cambio"; });
+      if(corrs.length) L.push("- **Correcciones:** "+corrs.map(function(e){ return e.fecha+" ("+e.motivo+")"; }).join("; "));
       if(idn) L.push("- **Identidad:** "+idn.nomina.titulo+" ("+idn.nomina.url+")"+idn.ids.map(function(x){ return "; "+x.esquema+" "+x.id+" ("+x.estado+")"; }).join(""));
     } else if(rec.tipo) L.push("- **Tipo:** "+rec.tipo);
     var ub=[rec.ciudad,rec.pais].filter(Boolean).join(", ");
@@ -2691,7 +2773,9 @@ function sel2(id,opts,v){ var s=el("select",{id:id});
   opts.forEach(function(o){ var op=el("option",{value:o[0],text:o[1]}); if(String(v||"")===String(o[0])) op.selected=true; s.appendChild(op); });
   return s; }
 function V(id){ var n=$(id); return n?String(n.value||"").trim():""; }
-function openSheet(title,build,save){
+var sheetLocal=false;
+function openSheet(title,build,save,local){   /* local: el texto del botón de un formulario que no escribe en el registro */
+  sheetLocal=!!local; $("sheetSave").textContent=local||"GUARDAR";
   $("sheetTitle").textContent=title; $("sheetErr").textContent="";
   clr(frm); build(frm); onSave=save; sheet.hidden=false;
   var f=frm.querySelector("input,select,textarea"); if(f) f.focus();
@@ -2700,10 +2784,10 @@ function closeSheet(){ sheet.hidden=true; onSave=null; }
 $("sheetX").onclick=closeSheet; $("sheetCancel").onclick=closeSheet;
 sheet.addEventListener("click",function(e){ if(e.target===sheet) closeSheet(); });
 $("sheetSave").onclick=function(){
-  if(!onSave||!db) return;
+  if(!onSave||(!db&&!sheetLocal)) return;
   var b=this; b.disabled=true; $("sheetErr").textContent="";
   Promise.resolve().then(onSave).then(function(ok){
-    b.disabled=false; if(ok!==false){ closeSheet(); toast("Guardado en el registro."); }
+    b.disabled=false; if(ok!==false){ var loc=sheetLocal; closeSheet(); if(!loc) toast("Guardado en el registro."); }
   }).catch(function(e){
     b.disabled=false;
     diag.ultimoError=(e&&e.code)||"error";
@@ -2881,6 +2965,7 @@ function refresh(){
   if(panelMode==="cola") openPanel("cola","SOLICITUDES",buildCola);
   if(panelMode==="pend") openPanel("pend","VERIFICACIÓN",buildPendientes);
   if(panelMode==="exp") openPanel("exp","EXPORTAR",buildExportar);
+  if(panelMode==="hist") openPanel("hist","HISTORIAL",buildHistorial);
   if(panelMode==="analisis") openPanel("analisis","ANÁLISIS",buildAnalisis);
   if(panelMode==="ontologia") openPanel("ontologia","ONTOLOGÍA",buildOntologia);
   if(panelMode==="acciones") openPanel("acciones","REGISTRO DE ACCIONES",buildAcciones);
@@ -2920,6 +3005,13 @@ fetch("data/evidencia.json").then(function(r){ return r.ok?r.json():null; }).the
 fetch("data/identidad.json").then(function(r){ return r.ok?r.json():null; }).then(function(e){
   if(e&&e.personas){ ident=e; if(ready.p&&ready.o&&ready.v) refresh(); }
 }).catch(function(){});
+["historial","rectificaciones","contacto"].forEach(function(n){
+  fetch("data/"+n+".json").then(function(r){ return r.ok?r.json():null; }).then(function(j){
+    if(!j) return;
+    if(n==="historial") hist=j; else if(n==="rectificaciones") rect=j; else contacto=TA.canal(j);
+    if(ready.p&&ready.o&&ready.v) refresh();
+  }).catch(function(){});
+});
 fetch("data/world.json").then(function(r){ return r.ok?r.json():null; }).then(function(w){
   if(w&&w.land){
     w.land.forEach(function(r){

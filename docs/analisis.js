@@ -41,7 +41,30 @@
     if (v.registro === "declaracion") return { id: "propia", nivel: 2, lb: "LO DECLARA LA FUENTE", casas: n };
     return { id: "una", nivel: 2, lb: "UNA SOLA FUENTE", casas: n };
   }
-  function conRespaldo(v) { return respaldo(v).nivel >= 3; }
+  function conRespaldo(v, rect) { return respaldo(v).nivel >= 3 && !enRevision(rect, v); }
+  /* Solicitud de corrección abierta sobre este vínculo o sobre toda la ficha. */
+  function enRevision(rect, v) {
+    return (rect && rect.solicitudes || []).filter(function (s) {
+      if (s.estado !== "recibida" && s.estado !== "en revisión") return false;
+      return (s.vinculos || []).length ? s.vinculos.indexOf(v._id) >= 0 : s.ficha && s.ficha === v.personaId;
+    })[0] || null;
+  }
+  function cambiosDe(hist, filtro) {
+    return (hist && hist.entradas || []).filter(filtro).sort(function (a, b) { return b.n - a.n; });
+  }
+  /* Texto de una solicitud. Se arma aquí y no se envía ni se guarda solo. */
+  function solicitud(d) {
+    return ["SOLICITUD DE CORRECCIÓN A TELAR", "", "Ficha: " + d.ficha, "Enlace: " + d.enlace, "Qué dato: " + d.dato,
+      "Qué está mal: " + d.problema, "Cómo debería decir: " + (d.propuesta || "—"), "Fuente que lo respalda: " + (d.fuente || "—"),
+      "Relación con la persona (opcional): " + (d.relacion || "—"), "Fecha: " + d.fecha, ""].join("\n");
+  }
+  function canal(c) {
+    var v = c && String(c.valor || "").trim();
+    if (!v) return null;
+    if (c.tipo === "correo" && /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/.test(v)) return { tipo: "correo", valor: v };
+    if (c.tipo === "enlace" && /^https:\/\//i.test(v)) return { tipo: "enlace", valor: v };
+    return null;
+  }
 
   /* ── fechas: «2014» es un intervalo, no un día */
   function rango(s) {
@@ -274,5 +297,5 @@
 
   return { norm: norm, dominio: dominio, casa: casa, respaldo: respaldo, conRespaldo: conRespaldo, rango: rango, solapan: solapan,
     tiempoComun: tiempoComun, caminos: caminos, eslabonDebil: eslabonDebil, puentes: puentes, posiblesDuplicados: posiblesDuplicados,
-    confundible: confundible, confundibles: confundibles, nombreCompleto: nombreCompleto, evidencia: evidencia, saltoA: saltoA, pendientes: pendientes, buscar: buscar, csv: csv, gexf: gexf };
+    enRevision: enRevision, cambiosDe: cambiosDe, solicitud: solicitud, canal: canal, confundible: confundible, confundibles: confundibles, nombreCompleto: nombreCompleto, evidencia: evidencia, saltoA: saltoA, pendientes: pendientes, buscar: buscar, csv: csv, gexf: gexf };
 });

@@ -6,6 +6,8 @@ Registro de influencia de figuras públicas, con la fuente de cada afirmación.
 
 - `docs/` es la app que publica GitHub Pages. Abre en modo lectura; `?taller` permite editar en el propio navegador, con Gemma 4 (Apache 2.0) para generar pistas sin verificar.
 - `docs/data/registro.json` es el registro publicado.
+- `docs/data/historial.json` dice qué cambió y por qué. Tras editar el registro: `python -m historial.anotar --motivo "…" --quien "…"`. Sin eso, el CI falla.
+- `docs/data/rectificaciones.json` lleva las solicitudes de corrección y su respuesta, nunca quién pidió.
 - `telar_motor/` es el motor de investigación documental, descrito abajo.
 
 Toda la IA de Telar es de pesos abiertos con licencia libre.

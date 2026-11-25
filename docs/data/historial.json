@@ -1,0 +1,183 @@
+{
+ "nota": "Qué cambió en el registro, cuándo y por qué. Se dice qué campo cambió, no qué decía antes.",
+ "entradas": [
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "alejandro-canut-de-bon-lagos",
+   "ficha": "alejandro-canut-de-bon-lagos",
+   "n": 1,
+   "vinculos": 5,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "alfredo-moreno-charme",
+   "ficha": "alfredo-moreno-charme",
+   "n": 2,
+   "vinculos": 1,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "bernardo-fontaine-talavera",
+   "ficha": "bernardo-fontaine-talavera",
+   "n": 3,
+   "vinculos": 8,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "daniel-diaz-olguin",
+   "ficha": "daniel-diaz-olguin",
+   "n": 4,
+   "vinculos": 1,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "eduardo-bitran-colodro",
+   "ficha": "eduardo-bitran-colodro",
+   "n": 5,
+   "vinculos": 1,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "luz-granier-bulnes",
+   "ficha": "luz-granier-bulnes",
+   "n": 6,
+   "vinculos": 13,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "ricardo-alvarez-fuentes",
+   "ficha": "ricardo-alvarez-fuentes",
+   "n": 7,
+   "vinculos": 1,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "ricardo-calderon-galaz",
+   "ficha": "ricardo-calderon-galaz",
+   "n": 8,
+   "vinculos": 1,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-20",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "tamara-agnic-martinez",
+   "ficha": "tamara-agnic-martinez",
+   "n": 9,
+   "vinculos": 1,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-21",
+   "accion": "alta",
+   "coleccion": "personas",
+   "id": "sebastian-pinera",
+   "ficha": "sebastian-pinera",
+   "n": 10,
+   "vinculos": 15,
+   "motivo": "Carga inicial desde fuentes públicas, sin revisión humana.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-25",
+   "accion": "cambio",
+   "coleccion": "vinculos",
+   "id": "luz-granier-bulnes-org-colbun-directora-sf",
+   "ficha": "luz-granier-bulnes",
+   "campos": [
+    "detalle",
+    "etiqueta"
+   ],
+   "n": 11,
+   "motivo": "La fuente dice que integró el directorio, no que sea directora hoy.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-25",
+   "accion": "cambio",
+   "coleccion": "vinculos",
+   "id": "luz-granier-bulnes-org-grupo-saesa-directora-independiente-2",
+   "ficha": "luz-granier-bulnes",
+   "campos": [
+    "desde",
+    "detalle",
+    "etiqueta"
+   ],
+   "n": 12,
+   "motivo": "La fuente une Saesa y Entel: la fecha y el papel de independiente solo son claros para Entel.",
+   "quien": "asistente de IA"
+  },
+  {
+   "fecha": "2026-11-25",
+   "accion": "cambio",
+   "coleccion": "personas",
+   "id": "alejandro-canut-de-bon-lagos",
+   "ficha": "alejandro-canut-de-bon-lagos",
+   "campos": [
+    "estado"
+   ],
+   "n": 13,
+   "motivo": "Decía «revisada» y no la había revisado una persona.",
+   "quien": "asistente de IA, por orden del editor"
+  },
+  {
+   "fecha": "2026-11-25",
+   "accion": "cambio",
+   "coleccion": "personas",
+   "id": "bernardo-fontaine-talavera",
+   "ficha": "bernardo-fontaine-talavera",
+   "campos": [
+    "estado"
+   ],
+   "n": 14,
+   "motivo": "Decía «revisada» y no la había revisado una persona.",
+   "quien": "asistente de IA, por orden del editor"
+  },
+  {
+   "fecha": "2026-11-25",
+   "accion": "cambio",
+   "coleccion": "personas",
+   "id": "luz-granier-bulnes",
+   "ficha": "luz-granier-bulnes",
+   "campos": [
+    "estado"
+   ],
+   "n": 15,
+   "motivo": "Decía «revisada» y no la había revisado una persona.",
+   "quien": "asistente de IA, por orden del editor"
+  }
+ ]
+}
