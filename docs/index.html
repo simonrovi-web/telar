@@ -2525,6 +2525,15 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
 (function(){
   var qin=$("qin"), qres=$("qres"), items=[], idx=0;
   function close(){ qres.hidden=true; items=[]; }
+  /* El investigador vive en un repositorio privado: el enlace solo abre a quien lo administra.
+     El nombre va por el portapapeles, no en la dirección. */
+  function nube(){
+    var q=qin.value.trim(); if(q.split(/\s+/).length<2||q.length<6) return;
+    qres.appendChild(el("button",{class:"inv",type:"button",onmousedown:function(e){ e.preventDefault(); },onclick:function(){
+      copiar(q,"Nombre copiado: pégalo en el formulario.");
+      window.open("https://github.com/simonrovi-web/telar-investigador/issues/new?template=investigar.yml","_blank","noopener,noreferrer"); close(); }},[
+      el("span",{class:"k",text:"INVESTIGAR"}),el("span",{class:"t",text:"Buscar a «"+q+"» en la web"}),el("span",{class:"s",text:"solo quien administra"})]));
+  }
   function activate(it){
     if(!it) return;
     close(); qin.blur();
@@ -2550,11 +2559,11 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
     if(canEdit && !estatico && db && q.length>=3 && !exacta) items.push({kind:"inv",q:q});
     if(!items.length){
       qres.appendChild(el("div",{class:"vacio",text:
-          estatico ? "Nada en el registro con ese nombre. Esta copia es de solo lectura."
+          estatico ? "Nada en el registro con ese nombre."
         : !db ? "El registro no está conectado: no se puede encargar ahora. Abre SOLICITUDES para ver qué falla."
         : !canEdit ? "Nada en el registro con ese nombre, y tu acceso es de solo lectura: no puedes encargar."
         : "Escribe al menos tres letras para encargar una investigación."}));
-      qres.hidden=false; return;
+      nube(); qres.hidden=false; return;
     }
     if(idx>=items.length) idx=0;
     items.forEach(function(it,i){
@@ -2582,6 +2591,7 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
       b.addEventListener("mousedown",function(e){ e.preventDefault(); activate(it); });
       qres.appendChild(b);
     });
+    if(!exacta) nube();
     qres.hidden=false;
   }
   qin.addEventListener("input",function(){ idx=0; paint(); dismissHint(); });
