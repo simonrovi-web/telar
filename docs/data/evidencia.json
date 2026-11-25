@@ -1,0 +1,1459 @@
+{
+ "nota": "Dónde dice cada fuente lo que el registro afirma. De los documentos oficiales se guarda la frase si es corta; del resto, solo una marca para encontrarla. Que la frase esté no prueba que sea cierta.",
+ "seleccion": "asistida, sin revisión humana",
+ "revisado": "2026-11-25",
+ "documentos": {
+  "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.fundacionfuturo.cl/quienes_somos/": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.elmostrador.cl/noticias/pais/2009/09/28/este-es-el-expediente-de-la-svs-que-sanciono-a-pinera-por-la-compra-de-acciones-lan-2/": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  },
+  "https://www.ciperchile.cl/2009/09/29/el-directorio-de-lan-que-se-transformo-en-la-peor-pesadilla-de-pinera/": {
+   "estado": "vigente",
+   "desde": "2026-11-25",
+   "intento": "2026-11-25",
+   "comprobado": "2026-11-25"
+  }
+ },
+ "vinculos": {
+  "alejandro-canut-de-bon-lagos-org-corporacion-nacional-del-co": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "director alejandro canut de",
+    "fin": "de mayo de 2030",
+    "n": 24,
+    "sha": "ed8bf329a4a5e41075ef7443",
+    "salto": [
+     "22 de mayo de 2026 a 21 de mayo de 2030",
+     ""
+    ],
+    "cita": "Director Alejandro Canut de Bon Designado por la Presidencia de la República Período: 22 de mayo de 2026 a 21 de mayo de 2030",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "alejandro canut de",
+    "fin": "bon lagos presidente",
+    "n": 6,
+    "sha": "391756b330651f5b354277f9",
+    "salto": [
+     "Alejandro Canut de Bon",
+     "de Bon Lagos (presidente)"
+    ],
+    "cita": "Alejandro Canut de Bon Lagos (presidente)",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "alejandro-canut-de-bon-lagos-org-empresa-nacional-de-mineria": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "su llegada al directorio",
+    "fin": "salida de luis rodriguez",
+    "n": 52,
+    "sha": "38e7142831515ceb5ffcc446",
+    "salto": [
+     "Su llegada al directorio",
+     "salida de Luis Rodríguez"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "término",
+     "detalle"
+    ],
+    "ini": "al mismo tiempo que",
+    "fin": "director de la estatal",
+    "n": 25,
+    "sha": "e4435a7cdf502161451b6011",
+    "salto": [
+     "Al mismo tiempo que",
+     "director de la estatal"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "alejandro-canut-de-bon-lagos-org-minera-escondida-gerente-le": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "entre 2008 y 2012",
+    "fin": "contratos y cumplimiento regulatorio",
+    "n": 42,
+    "sha": "a5a2724894a74a98ec8b83d4",
+    "salto": [
+     "Entre 2008 y 2012",
+     "contratos y cumplimiento regulatorio"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "alejandro-canut-de-bon-lagos-org-proyecto-caserones-gerente-": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "entre 2008 y 2012",
+    "fin": "contratos y cumplimiento regulatorio",
+    "n": 42,
+    "sha": "a5a2724894a74a98ec8b83d4",
+    "salto": [
+     "Entre 2008 y 2012",
+     "contratos y cumplimiento regulatorio"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "alejandro-canut-de-bon-lagos-org-sociedad-nacional-de-mineri": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "detalle"
+    ],
+    "ini": "su llegada al directorio",
+    "fin": "salida de luis rodriguez",
+    "n": 52,
+    "sha": "38e7142831515ceb5ffcc446",
+    "salto": [
+     "Su llegada al directorio",
+     "salida de Luis Rodríguez"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "alfredo-moreno-charme-org-corporacion-nacional-del-cobre-de-": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "director alfredo moreno charme",
+    "fin": "de mayo de 2029",
+    "n": 23,
+    "sha": "150fa222812be45366503020",
+    "salto": [
+     "14 de mayo de 2025 a 13 de mayo de 2029",
+     ""
+    ],
+    "cita": "Director Alfredo Moreno Charmé Representante del Consejo de Alta Dirección Pública Período: 14 de mayo de 2025 a 13 de mayo de 2029",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-banco-bice-integro-el-directo": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ha sido ejecutivo asesor",
+    "fin": "y coca cola embonor",
+    "n": 44,
+    "sha": "b573947c17e40e62014da8fa",
+    "salto": [
+     "Ha sido ejecutivo, asesor",
+     "y Coca Cola Embonor"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-citibank-chile-integro-el-dir": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ha sido ejecutivo asesor",
+    "fin": "y coca cola embonor",
+    "n": 44,
+    "sha": "b573947c17e40e62014da8fa",
+    "salto": [
+     "Ha sido ejecutivo, asesor",
+     "y Coca Cola Embonor"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-cmr-falabella-integro-el-dire": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ha sido ejecutivo asesor",
+    "fin": "y coca cola embonor",
+    "n": 44,
+    "sha": "b573947c17e40e62014da8fa",
+    "salto": [
+     "Ha sido ejecutivo, asesor",
+     "y Coca Cola Embonor"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-coca-cola-embonor-integro-el-": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ha sido ejecutivo asesor",
+    "fin": "y coca cola embonor",
+    "n": 44,
+    "sha": "b573947c17e40e62014da8fa",
+    "salto": [
+     "Ha sido ejecutivo, asesor",
+     "y Coca Cola Embonor"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-convencion-constitucional-con": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "detalle"
+    ],
+    "ini": "fue electo en 2021",
+    "fin": "ambiente y modelo economico",
+    "n": 18,
+    "sha": "d293018edb6e63a1316ae6eb",
+    "salto": [
+     "Fue electo en 2021",
+     "Ambiente y Modelo Económico"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-corporacion-nacional-del-cobr": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "presidente del directorio bernardo",
+    "fin": "de mayo de 2030",
+    "n": 25,
+    "sha": "f80443f3d2da407ffafe727b",
+    "salto": [
+     "27 de mayo de 2026 a 26 de mayo de 2030",
+     ""
+    ],
+    "cita": "Presidente del directorio Bernardo Fontaine Talavera Designado por la Presidencia de la República Período: 27 de mayo de 2026 a 26 de mayo de 2030",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "santiago 27 de mayo",
+    "fin": "minera estatal ruben alvarado",
+    "n": 34,
+    "sha": "af5bd4693193390b3719e961",
+    "salto": [
+     "Santiago, 27 de mayo",
+     "minera estatal, Rubén Alvarado"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-lan-chile-integro-el-director": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ha sido ejecutivo asesor",
+    "fin": "y coca cola embonor",
+    "n": 44,
+    "sha": "b573947c17e40e62014da8fa",
+    "salto": [
+     "Ha sido ejecutivo, asesor",
+     "y Coca Cola Embonor"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "bernardo-fontaine-talavera-org-metro-de-santiago-integro-el-": [
+   {
+    "url": "https://www.codelco.com/prensa/2026/bernardo-fontaine-asume-como-presidente-del-directorio-de-codelco",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ha sido ejecutivo asesor",
+    "fin": "y coca cola embonor",
+    "n": 44,
+    "sha": "b573947c17e40e62014da8fa",
+    "salto": [
+     "Ha sido ejecutivo, asesor",
+     "y Coca Cola Embonor"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "daniel-diaz-olguin-org-corporacion-nacional-del-cobre-de-chi": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "director daniel diaz olguin",
+    "fin": "de mayo de 2030",
+    "n": 20,
+    "sha": "e93cff570581d317cbc96e05",
+    "salto": [
+     "27 de mayo de 2026 a 26 de mayo de 2030",
+     ""
+    ],
+    "cita": "Director Daniel Díaz Olguín Representante de los trabajadores Período: 27 de mayo de 2026 a 26 de mayo de 2030",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "eduardo-bitran-colodro-org-corporacion-nacional-del-cobre-de": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "director eduardo bitran colodro",
+    "fin": "de mayo de 2027",
+    "n": 23,
+    "sha": "1d195bd6b7095569f9390400",
+    "salto": [
+     "30 de marzo de 2023 a 10 de mayo de 2027",
+     ""
+    ],
+    "cita": "Director Eduardo Bitran Colodro Representante del Consejo de Alta Dirección Pública Período: 30 de marzo de 2023 a 10 de mayo de 2027",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "eduardo bitran",
+    "fin": "colodro presidente",
+    "n": 4,
+    "sha": "5f79bd80127ddf5055098cf7",
+    "salto": [
+     "Eduardo Bitran Colodro (presidente)",
+     "Eduardo Bitran Colodro (presidente)"
+    ],
+    "cita": "Eduardo Bitran Colodro (presidente)",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-centro-de-investigacion-minero-y-meta": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "antes habia participado en",
+    "fin": "electrica guacolda y termoandes",
+    "n": 19,
+    "sha": "a5a2b3957dc27772bc70448c",
+    "salto": [
+     "Antes había participado en",
+     "Eléctrica Guacolda y TermoAndes"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-colbun-directora-sf": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "en paralelo ha integrado",
+    "fin": "ejerce como directora independiente",
+    "n": 29,
+    "sha": "1f45ca6000bc41b879559dc0",
+    "salto": [
+     "En paralelo, ha integrado",
+     "ejerce como directora independiente"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-corporacion-nacional-del-cobre-de-chi": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "directora luz granier bulnes",
+    "fin": "de mayo de 2030",
+    "n": 23,
+    "sha": "cfa0345f9cf7f21cadc203bd",
+    "salto": [
+     "22 de mayo de 2026 a 21 de mayo de 2030",
+     ""
+    ],
+    "cita": "Directora Luz Granier Bulnes Designada por la Presidencia de la República Período: 22 de mayo de 2026 a 21 de mayo de 2030",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "luz granier",
+    "fin": "bulnes vicepresidenta",
+    "n": 4,
+    "sha": "411f57964ed8c07e17fdcf7a",
+    "salto": [
+     "Luz Granier Bulnes (vicepresidenta)",
+     "Luz Granier Bulnes (vicepresidenta)"
+    ],
+    "cita": "Luz Granier Bulnes (vicepresidenta)",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-desarrollo-pais-presidenta-del-direct": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "término",
+     "detalle"
+    ],
+    "ini": "su nombre se consolido",
+    "fin": "del ejecutivo de turno",
+    "n": 67,
+    "sha": "19c74abb7197ada675fad28b",
+    "salto": [
+     "Su nombre se consolidó",
+     "del Ejecutivo de turno"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-electrica-guacolda-integro-el-directo": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "antes habia participado en",
+    "fin": "electrica guacolda y termoandes",
+    "n": 19,
+    "sha": "a5a2b3957dc27772bc70448c",
+    "salto": [
+     "Antes había participado en",
+     "Eléctrica Guacolda y TermoAndes"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-entel-directora-independiente-2023-04": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "en paralelo ha integrado",
+    "fin": "ejerce como directora independiente",
+    "n": 29,
+    "sha": "1f45ca6000bc41b879559dc0",
+    "salto": [
+     "En paralelo, ha integrado",
+     "ejerce como directora independiente"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-gener-once-anos-en-la-compania-sf": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "antes de ello habia",
+    "fin": "subgerencia de inversiones internacionales",
+    "n": 34,
+    "sha": "d177a23e18fb75ff8eec5d46",
+    "salto": [
+     "Antes de ello, había",
+     "Subgerencia de Inversiones Internacionales"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-grupo-saesa-directora-independiente-2": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "en paralelo ha integrado",
+    "fin": "ejerce como directora independiente",
+    "n": 29,
+    "sha": "1f45ca6000bc41b879559dc0",
+    "salto": [
+     "En paralelo, ha integrado",
+     "ejerce como directora independiente"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-loginsa-integro-el-directorio-sf": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "antes habia participado en",
+    "fin": "electrica guacolda y termoandes",
+    "n": 19,
+    "sha": "a5a2b3957dc27772bc70448c",
+    "salto": [
+     "Antes había participado en",
+     "Eléctrica Guacolda y TermoAndes"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-metro-de-santiago-directora-2018": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "en paralelo ha integrado",
+    "fin": "ejerce como directora independiente",
+    "n": 29,
+    "sha": "1f45ca6000bc41b879559dc0",
+    "salto": [
+     "En paralelo, ha integrado",
+     "ejerce como directora independiente"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-renovacion-nacional-militante-sf": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ingeniera comercial de la",
+    "fin": "a infraestructura y energia",
+    "n": 39,
+    "sha": "90fe1aad987481fbd280a48a",
+    "salto": [
+     "Ingeniera comercial de la",
+     "a infraestructura y energía"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-subsecretaria-de-servicios-sociales-s": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "su paso por el",
+    "fin": "de mineria y energia",
+    "n": 38,
+    "sha": "2d574aa6d2199768a3e88323",
+    "salto": [
+     "Su paso por el",
+     "de Minería y Energía"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "luz-granier-bulnes-org-termoandes-integro-el-directorio-sf": [
+   {
+    "url": "https://www.emol.com/noticias/Economia/2026/05/15/1200117/codelco-gobierno-directores-granier-canut.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "antes habia participado en",
+    "fin": "electrica guacolda y termoandes",
+    "n": 19,
+    "sha": "a5a2b3957dc27772bc70448c",
+    "salto": [
+     "Antes había participado en",
+     "Eléctrica Guacolda y TermoAndes"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-bancard-1979": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "detalle"
+    ],
+    "ini": "en 1979 creo bancard",
+    "fin": "credito en nuestro pais",
+    "n": 39,
+    "sha": "9c5d36eb12be843fc70c6db7",
+    "salto": [
+     "En 1979 creó Bancard",
+     "crédito en nuestro país"
+    ],
+    "cita": "En 1979 creó Bancard S.A., sociedad que trajo a Chile las tarjetas de crédito Visa y MasterCard y que a través de su división Fincard S.A. fue la mayor emisora de tarjetas de crédito en nuestro país.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "por su parte bancard",
+    "fin": "activos en el exterior",
+    "n": 18,
+    "sha": "33c07c2ba215c39d452cf76c",
+    "salto": [
+     "Por su parte, Bancard",
+     "activos en el exterior"
+    ],
+    "cita": "Por su parte, Bancard, compañía que maneja sus inversiones, asumió la administración de sus activos en el exterior.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "en 1979 creo bancard",
+    "fin": "credito visa y mastercard",
+    "n": 18,
+    "sha": "88e31fec38ca58aaf9784827",
+    "salto": [
+     "En 1979 creó Bancard",
+     "crédito Visa y MasterCard"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-banco-talca-gerente-1978": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término",
+     "detalle"
+    ],
+    "ini": "en 1978 asumio la",
+    "fin": "entidad pidiera su renuncia",
+    "n": 25,
+    "sha": "16e480ff0fbe2376960ef249",
+    "salto": [
+     "En 1978 asumió la",
+     "entidad pidiera su renuncia"
+    ],
+    "cita": "En 1978 asumió la gerencia general del Banco de Talca, cargo que dejó en 1980 luego que el Directorio de la entidad pidiera su renuncia.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "en 1978 llego al",
+    "fin": "asumio como gerente general",
+    "n": 12,
+    "sha": "eafe9f4686a0aa8eb1374815",
+    "salto": [
+     "En 1978 llegó al",
+     "asumió como gerente general"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-blanco-y-negro-2005": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "ademas se integro como",
+    "fin": "la empresa farmaceutica fasa",
+    "n": 33,
+    "sha": "8efbbfaf8406c19b7d75856d",
+    "salto": [
+     "Además, se integró como",
+     "la empresa farmacéutica FASA"
+    ],
+    "cita": "Además, se integró como accionista en la sociedad Blanco y Negro, controladora del Club Deportivo Colo Colo; en Azul Azul, controladora del Club Deportivo Universidad de Chile, y en la empresa farmacéutica FASA.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "organización"
+    ],
+    "ini": "durante la primera decada",
+    "fin": "a blanco y negro",
+    "n": 29,
+    "sha": "39428e86b61b5d32c23adc2c",
+    "salto": [
+     "Durante la primera década",
+     "a Blanco y Negro"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "término"
+    ],
+    "ini": "de esta ultima sociedad",
+    "fin": "entre 2006 y 2009",
+    "n": 10,
+    "sha": "4af1d6de95d71715ecd1a5a4",
+    "salto": [
+     "De esta última sociedad",
+     "entre 2006 y 2009"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-chilevision-2005": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "en 2005 compro el",
+    "fin": "canal de television chilevision",
+    "n": 8,
+    "sha": "494c99cbb11c7cd59d38d643",
+    "salto": [
+     "En 2005 compró el",
+     "canal de televisión ChileVisión"
+    ],
+    "cita": "En 2005 compró el canal de televisión ChileVisión.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "durante la primera decada",
+    "fin": "a blanco y negro",
+    "n": 29,
+    "sha": "39428e86b61b5d32c23adc2c",
+    "salto": [
+     "Durante la primera década",
+     "a Blanco y Negro"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-citicorp-1980": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "entre 1980 y hasta",
+    "fin": "y el banco santiago",
+    "n": 20,
+    "sha": "f2ed637e69ff02f655110389",
+    "salto": [
+     "Entre 1980 y hasta",
+     "y el Banco Santiago"
+    ],
+    "cita": "Entre 1980 y hasta 1987 fue presidente y gerente general de Citicorp Chile, formado por Citibank y el Banco Santiago.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-fundacion-futuro-1993": [
+   {
+    "url": "https://www.fundacionfuturo.cl/quienes_somos/",
+    "cubre": [
+     "inicio"
+    ],
+    "ini": "desde su creacion en",
+    "fin": "de reflexion y convivencia",
+    "n": 46,
+    "sha": "9b2917006ec4fa3b3c5393db",
+    "salto": [
+     "Desde su creación en",
+     "de reflexión y convivencia"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.fundacionfuturo.cl/quienes_somos/",
+    "cubre": [
+     "papel",
+     "organización",
+     "término"
+    ],
+    "ini": "sebastian pinera echenique fue",
+    "fin": "chile por primera vez",
+    "n": 24,
+    "sha": "59d198bd909f3fb002fca079",
+    "salto": [
+     "Sebastián Piñera Echenique fue",
+     "Chile por primera vez"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.fundacionfuturo.cl/quienes_somos/",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "desde entonces y hasta",
+    "fin": "morel ejercio el cargo",
+    "n": 13,
+    "sha": "b267c42a10f4628f7aef8fe8",
+    "salto": [
+     "Desde entonces, y hasta",
+     "Morel ejerció el cargo"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-fundacion-futuro-2018": [
+   {
+    "url": "https://www.fundacionfuturo.cl/quienes_somos/",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "en 2018 sebastian pinera",
+    "fin": "hasta el ano 2024",
+    "n": 17,
+    "sha": "bff42ab70068e8d73ca8f3a6",
+    "salto": [
+     "En 2018, Sebastián Piñera",
+     "el año 2024 (†)"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-lan-16pc-1994": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "en 1994 ingreso en",
+    "fin": "la empresa escandinava sas",
+    "n": 25,
+    "sha": "ea6190a4114e8b38366dece5",
+    "salto": [
+     "En 1994 ingresó en",
+     "la empresa escandinava SAS"
+    ],
+    "cita": "En 1994 ingresó en el negocio aéreo al comprar el 16% de la aerolínea Lan Chile (LAN Airlines desde 2005) a la empresa escandinava SAS.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "ese ano compro el",
+    "fin": "de us 875 millones",
+    "n": 17,
+    "sha": "89f66a40ec28d9e463ad19c5",
+    "salto": [
+     "Ese año compró el",
+     "más de US$875 millones"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "ademas en esos anos",
+    "fin": "1 1 mil millones",
+    "n": 22,
+    "sha": "1411fa98e1d33cde0dd612b6",
+    "salto": [
+     "Además, en esos años",
+     "en US$1,1 mil millones"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-lan-sancion-svs-2007": [
+   {
+    "url": "https://www.elmostrador.cl/noticias/pais/2009/09/28/este-es-el-expediente-de-la-svs-que-sanciono-a-pinera-por-la-compra-de-acciones-lan-2/",
+    "cubre": [
+     "papel",
+     "término"
+    ],
+    "ini": "esta ultima sin embargo",
+    "fin": "de julio de 2007",
+    "n": 28,
+    "sha": "65b80c260c99041aa6ccdfe6",
+    "salto": [
+     "Esta última, sin embargo",
+     "de julio de 2007"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.elmostrador.cl/noticias/pais/2009/09/28/este-es-el-expediente-de-la-svs-que-sanciono-a-pinera-por-la-compra-de-acciones-lan-2/",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "por lo anterior el",
+    "fin": "carrera a la moneda",
+    "n": 42,
+    "sha": "ad27abb1ad56c59cbe7561ce",
+    "salto": [
+     "Por lo anterior, el",
+     "carrera a La Moneda"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.ciperchile.cl/2009/09/29/el-directorio-de-lan-que-se-transformo-en-la-peor-pesadilla-de-pinera/",
+    "cubre": [
+     "inicio",
+     "detalle"
+    ],
+    "ini": "apenas 29 minutos despues",
+    "fin": "su participacion en lan",
+    "n": 35,
+    "sha": "ff79800f21566f29c0ade7ee",
+    "salto": [
+     "Apenas 29 minutos después",
+     "su participación en LAN"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.ciperchile.cl/2009/09/29/el-directorio-de-lan-que-se-transformo-en-la-peor-pesadilla-de-pinera/",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "pinera desembolso 9 800",
+    "fin": "us 1 5 millones",
+    "n": 16,
+    "sha": "d3e446fbedd0ae3ad197efb5",
+    "salto": [
+     "Piñera desembolsó $9.800 millones",
+     "millones (US$ 1,5 millones)"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.ciperchile.cl/2009/09/29/el-directorio-de-lan-que-se-transformo-en-la-peor-pesadilla-de-pinera/",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "de hecho cuando se",
+    "fin": "practica historica de pinera",
+    "n": 38,
+    "sha": "7fbb0b338a5d82ed6f7f1f03",
+    "salto": [
+     "De hecho cuando se",
+     "práctica histórica de Piñera"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-presidencia-2010": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "inicio",
+     "término"
+    ],
+    "ini": "tras el triunfo el",
+    "fin": "de marzo de 2014",
+    "n": 24,
+    "sha": "63bd22c31c210a038be1f741",
+    "salto": [
+     "Tras el triunfo, el",
+     "de marzo de 2014"
+    ],
+    "cita": "Tras el triunfo, el 11 de marzo de 2010 asumió la presidencia de Chile, el que ejerció hasta el 11 de marzo de 2014.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-presidencia-2018": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "inicio"
+    ],
+    "ini": "el 11 de marzo",
+    "fin": "el periodo 2018 2022",
+    "n": 26,
+    "sha": "7a65f9558acd4288cfdb0965",
+    "salto": [
+     "El 11 de marzo",
+     "por el periodo 2018-2022"
+    ],
+    "cita": "El 11 de marzo de 2018, ante el Congreso Nacional, reunido el Pleno en Valparaíso, asume la presidencia de la República por el periodo 2018-2022.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "término"
+    ],
+    "ini": "el 11 de marzo",
+    "fin": "a gabriel boric font",
+    "n": 17,
+    "sha": "b5bac7d2a494331ad4985c35",
+    "salto": [
+     "El 11 de marzo",
+     "a Gabriel Boric Font"
+    ],
+    "cita": "El 11 de marzo de 2022 le entregó la Presidencia de la República a Gabriel Boric Font.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-quinenco-ingreso": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "en 2004 entro al",
+    "fin": "del mall parque arauco",
+    "n": 27,
+    "sha": "f9c35db68e13067fc58f9e43",
+    "salto": [
+     "En 2004 entró al",
+     "del mall Parque Arauco"
+    ],
+    "cita": "En 2004 entró al conglomerado Quiñenco (matriz del grupo económico Luksic), y formó parte de los directorios de la clínica Las Condes y del mall Parque Arauco.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.emol.com/noticias/Economia/2024/02/06/1120879/pinera-empresario-fallece-presidente.html",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "en 1999 en tanto",
+    "fin": "condes y parque arauco",
+    "n": 18,
+    "sha": "83ab58fe720ab38b47e452ab",
+    "salto": [
+     "En 1999, en tanto",
+     "Condes y Parque Arauco"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-rn-militancia": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "término"
+    ],
+    "ini": "tras su eleccion comenzo",
+    "fin": "parte de sus filas",
+    "n": 45,
+    "sha": "f5eb859741d7999f0ca6ef84",
+    "salto": [
+     "Tras su elección, comenzó",
+     "parte de sus filas"
+    ],
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-rn-presidente-2001": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "doctor en economia empresario",
+    "fin": "y marzo de 2004",
+    "n": 26,
+    "sha": "9a2b754ab03f0db3cfa33bc2",
+    "salto": [
+     "Doctor en Economía, empresario",
+     "y marzo de 2004"
+    ],
+    "cita": "Doctor en Economía, empresario y político independiente, ex militante del partido Renovación Nacional (RN), del cual fue presidente entre mayo de 2001 y marzo de 2004.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio"
+    ],
+    "ini": "en 2001 fue electo",
+    "fin": "armada jorge arancibia reyes",
+    "n": 37,
+    "sha": "ebb03c23f2f1e31bcb546c31",
+    "salto": [
+     "En 2001 fue electo",
+     "Armada, Jorge Arancibia Reyes"
+    ],
+    "cita": "En 2001 fue electo presidente de Renovación Nacional, año en que declinó presentarse a candidato a senador, por lo que su cupo fue asumido por el exalmirante y Comandante en Jefe de la Armada, Jorge Arancibia Reyes.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "pinera-senado-senador-1990": [
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "organización",
+     "detalle"
+    ],
+    "ini": "tambien lanzo su campana",
+    "fin": "ano las que gano",
+    "n": 27,
+    "sha": "2663675077a04c95e5175c26",
+    "salto": [
+     "También, lanzó su campaña",
+     "año, las que ganó"
+    ],
+    "cita": "También, lanzó su campaña como candidato independiente a senador por la 8a Circunscripción (Santiago Oriente), Región Metropolitana, para las elecciones parlamentarias del mismo año, las que ganó.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.bcn.cl/historiapolitica/resenas_biograficas/wiki/Sebasti%C3%A1n_Pi%C3%B1era_Echenique",
+    "cubre": [
+     "papel",
+     "inicio",
+     "término"
+    ],
+    "ini": "senador por la 8a",
+    "fin": "oriente periodo 1990 1998",
+    "n": 10,
+    "sha": "c6c954e288a0f2c5eb1bef6a",
+    "salto": [
+     "Senador por la 8ª",
+     "Santiago Oriente, periodo 1990-1998"
+    ],
+    "cita": "Senador por la 8ª Circunscripción Santiago Oriente, periodo 1990-1998.",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "ricardo-alvarez-fuentes-org-corporacion-nacional-del-cobre-d": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "director ricardo alvarez fuentes",
+    "fin": "de mayo de 2027",
+    "n": 23,
+    "sha": "96b67a97777f6ef448cc463e",
+    "salto": [
+     "11 de mayo de 2023 a 10 de mayo de 2027",
+     ""
+    ],
+    "cita": "Director Ricardo Álvarez Fuentes Representante del Consejo de Alta Dirección Pública Período: 11 de mayo de 2023 a 10 de mayo de 2027",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "ricardo alvarez",
+    "fin": "fuentes vicepresidente",
+    "n": 4,
+    "sha": "8f452c4ea1af1a449e5fcec3",
+    "salto": [
+     "Ricardo Álvarez Fuentes (vicepresidente)",
+     "Ricardo Álvarez Fuentes (vicepresidente)"
+    ],
+    "cita": "Ricardo Álvarez Fuentes (vicepresidente)",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "ricardo-calderon-galaz-org-corporacion-nacional-del-cobre-de": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "director ricardo calderon galaz",
+    "fin": "de abril de 2029",
+    "n": 20,
+    "sha": "f383b4ba1166272b449fa66e",
+    "salto": [
+     "23 de abril de 2025 a 22 de abril de 2029",
+     ""
+    ],
+    "cita": "Director Ricardo Calderón Galaz Representante de los trabajadores Período: 23 de abril de 2025 a 22 de abril de 2029",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ],
+  "tamara-agnic-martinez-org-corporacion-nacional-del-cobre-de-": [
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "papel",
+     "organización",
+     "inicio",
+     "término"
+    ],
+    "ini": "directora tamara agnic martinez",
+    "fin": "de mayo de 2029",
+    "n": 23,
+    "sha": "a51a5c7a6cbd93a87d820d8d",
+    "salto": [
+     "14 de mayo de 2025 a 13 de mayo de 2029",
+     ""
+    ],
+    "cita": "Directora Tamara Agnic Martínez Representante del Consejo de Alta Dirección Pública Período: 14 de mayo de 2025 a 13 de mayo de 2029",
+    "vigente": true,
+    "desde": "2026-11-25"
+   },
+   {
+    "url": "https://www.codelco.com/transparencia/estructura-organica-funciones-y-competencias/directorio/directorio",
+    "cubre": [
+     "detalle"
+    ],
+    "ini": "tamara agnic",
+    "fin": "martinez presidenta",
+    "n": 4,
+    "sha": "533fc5578becfe5257ada8a5",
+    "salto": [
+     "Tamara Agnic Martínez (presidenta)",
+     "Tamara Agnic Martínez (presidenta)"
+    ],
+    "cita": "Tamara Agnic Martínez (presidenta)",
+    "vigente": true,
+    "desde": "2026-11-25"
+   }
+  ]
+ },
+ "observaciones": {
+  "alejandro-canut-de-bon-lagos-org-corporacion-nacional-del-co": "Emol anunció que asumiría el 26 de mayo; Codelco fija el período desde el 22.",
+  "luz-granier-bulnes-org-corporacion-nacional-del-cobre-de-chi": "Emol anunció que asumiría el 26 de mayo; Codelco fija el período desde el 22.",
+  "luz-granier-bulnes-org-desarrollo-pais-presidenta-del-direct": "La fuente la sitúa «a partir de 2018», sin fecha exacta de inicio.",
+  "luz-granier-bulnes-org-grupo-saesa-directora-independiente-2": "La fuente une Saesa y Entel; la fecha y el papel de independiente solo son claros para Entel.",
+  "pinera-blanco-y-negro-2005": "La BCN no repite el año en esta frase: 2005 viene de la anterior. El término, 2009, es el de director.",
+  "pinera-rn-militancia": "La frase no da el año de inicio: 1990 se toma de su período como senador."
+ }
+}

@@ -260,6 +260,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--cy)}
 .claim .acc{gap:4px 10px}
 .claim .acc button,.claim .acc a{font-size:calc(7.5px * var(--k));letter-spacing:.16em;color:var(--txt-faint);padding:2px 0;text-decoration:none;border-bottom:1px dotted var(--line-2)}
 .claim .acc button:hover,.claim .acc a:hover{color:var(--cy)}
+.evid{margin-top:5px;border-left:2px solid var(--line-2);padding-left:8px}
+.evid summary{cursor:pointer;font-size:calc(7.5px * var(--k));letter-spacing:.16em;color:var(--txt-dim);padding:2px 0}
+.evid summary:hover{color:var(--cy)} .evid summary em{font-style:normal;color:var(--am)}
+.evid .fr{padding:5px 0;border-top:1px dotted rgba(120,190,210,.12);font-size:calc(8px * var(--k));line-height:1.55;color:var(--txt-faint);overflow-wrap:anywhere}
+.evid .fr blockquote{color:var(--txt);font-size:calc(8.5px * var(--k));margin-bottom:3px}
+.evid .fr.no span{color:var(--rd)}
+.evid .fr a{display:inline-block;margin-top:3px;font-size:calc(7.5px * var(--k));letter-spacing:.14em;color:var(--cy);text-decoration:none;border-bottom:1px dotted var(--cy-soft)}
+.evid .ob{font-size:calc(8px * var(--k));line-height:1.5;color:var(--txt-faint);padding:3px 0}
 .resp{font-size:calc(7.5px * var(--k));letter-spacing:.14em;padding:1px 5px;border:1px solid currentColor;white-space:nowrap}
 .resp.r0{color:var(--rd)} .resp.r1{color:var(--am)} .resp.r2{color:var(--am)} .resp.r3{color:var(--gr)} .resp.r4{color:var(--cy)}
 .tarea{padding:6px 0;border-top:1px dotted rgba(120,190,210,.12);display:block;width:100%;text-align:left}
@@ -697,7 +705,9 @@ function inWindow(v){
   if(a!=null&&b==null) hi=yMax==null?a:yMax;
   return hi>=wA && lo<=wB;
 }
-var TA=window.TelarAnalisis, soloRespaldo=false;
+var TA=window.TelarAnalisis, soloRespaldo=false, evid=null;
+function evidDe(v){ return TA.evidencia(evid,v._id,v); }
+function fechaCl(s){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s||"")); return m?m[3]+"-"+m[2]+"-"+m[1]:""; }
 function activeLink(v){ return dimOn[v.tipo]!==false && provOn[v.registro]!==false && inWindow(v) && (!soloRespaldo || v._fuente || TA.conRespaldo(v)); }
 function copiar(t,ok){
   try{ navigator.clipboard.writeText(t).then(function(){ toast(ok); },function(){ toast("El navegador no dejó copiar.",1); }); }
@@ -1292,6 +1302,24 @@ function claimEl(v, fromPersona){
   S.slice(0,3).forEach(function(s,i){ ac.appendChild(el("a",{href:"https://web.archive.org/web/*/"+s[1],target:"_blank",rel:"noopener noreferrer nofollow",
     title:"Copias guardadas de "+hostOf(s[1]),text:"ARCHIVO"+(S.length>1?" "+(i+1):"")})); });
   box.appendChild(ac);
+  var ev=evidDe(v);
+  if(ev.hay){
+    var caja=el("details",{class:"evid"});
+    caja.appendChild(el("summary",{},[document.createTextNode(ev.perdida?"⚑ UNA FRASE YA NO ESTÁ EN LA FUENTE":"EVIDENCIA · "+ev.frases.length+(ev.frases.length===1?" FRASE":" FRASES")),
+      ev.falta.length&&!ev.perdida?el("em",{text:" · "+ev.falta.join(" y ").toUpperCase()+(ev.falta.length>1?" DEDUCIDOS":" DEDUCIDO")}):document.createTextNode("")]));
+    ev.frases.forEach(function(m){
+      var d=(evid.documentos||{})[m.url]||{}, f=el("div",{class:"fr"+(m.vigente===false?" no":"")});
+      if(m.cita) f.appendChild(el("blockquote",{text:"«"+m.cita+"»"}));
+      f.appendChild(el("span",{text:hostOf(m.url)+" · sostiene "+m.cubre.join(", ")+" · "
+        +(m.vigente===false?"la frase no estaba el "+fechaCl(m.desde):"presente en la fuente el "+fechaCl(d.comprobado))
+        +(d.estado==="sin respuesta"||d.estado==="caida"?" · la página no respondió el "+fechaCl(d.intento):"")}));
+      f.appendChild(el("a",{href:TA.saltoA(m),target:"_blank",rel:"noopener noreferrer nofollow",text:"VER LA FRASE EN LA FUENTE"}));
+      caja.appendChild(f);
+    });
+    var ob=(evid.observaciones||{})[v._id]; if(ob) caja.appendChild(el("p",{class:"ob",text:"Observación: "+ob}));
+    caja.appendChild(el("p",{class:"ob",text:"Selección "+(evid.seleccion||"sin datos")+". Prueba que la fuente lo dice, no que sea cierto."}));
+    box.appendChild(caja);
+  } else if(evid && v._id && S.length) ac.appendChild(el("span",{class:"resp r1",text:"SIN FRASE LOCALIZADA"}));
   if(canEdit && v._id && !estatico){
     var rt=el("div",{class:"mt",style:"margin-top:4px"});
     rt.appendChild(el("button",{type:"button",style:"font-size:calc(7.5px * var(--k));letter-spacing:.18em;color:var(--txt-faint);padding:0",
@@ -1551,10 +1579,10 @@ function aristasActivas(){
 /* ═══════════ verificación: lo que falta comprobar ═══════════ */
 var pendClase="";
 function buildPendientes(body){
-  var todo=TA.pendientes(regActual(),hoyNum()), cl={};
+  var todo=TA.pendientes(regActual(),hoyNum(),evid), cl={};
   todo.forEach(function(t){ cl[t.clase]=(cl[t.clase]||0)+1; });
   body.appendChild(el("div",{class:"hint"},[el("b",{text:"Qué falta comprobar. "}),
-    document.createTextNode("Se calcula desde el propio registro, sin modelos: dónde una afirmación se apoya en poco, no tiene fechas o depende de un solo documento. Son tareas, no acusaciones.")]));
+    document.createTextNode((evid&&evid.revisado?"Último control de las fuentes: "+fechaCl(evid.revisado)+". ":"")+"Se calcula desde el propio registro, sin modelos: dónde una afirmación se apoya en poco, no tiene fechas o depende de un solo documento. Son tareas, no acusaciones.")]));
   var s=el("select",{"aria-label":"Clase de tarea",onchange:function(){ pendClase=s.value; openPanel("pend","VERIFICACIÓN",buildPendientes); }});
   s.appendChild(el("option",{value:"",text:"TODAS · "+todo.length}));
   Object.keys(cl).sort(function(a,b){ return cl[b]-cl[a]; }).forEach(function(k){ s.appendChild(el("option",{value:k,text:k+" · "+cl[k]})); });
@@ -2836,6 +2864,9 @@ function finishBoot(){
   setTimeout(function(){ $("boot").classList.add("off"); setTimeout(function(){ $("boot").hidden=true; },520); },260);
 }
 
+fetch("data/evidencia.json").then(function(r){ return r.ok?r.json():null; }).then(function(e){
+  if(e&&e.vinculos){ evid=e; if(ready.p&&ready.o&&ready.v) refresh(); }
+}).catch(function(){});
 fetch("data/world.json").then(function(r){ return r.ok?r.json():null; }).then(function(w){
   if(w&&w.land){
     w.land.forEach(function(r){

@@ -145,7 +145,25 @@
   }
 
   /* ── lo que falta verificar */
-  function pendientes(reg, hoy) {
+  /* Evidencia de un vínculo: qué partes sostienen sus frases y si siguen en la fuente. */
+  var PARTES = { papel: 1, "organización": 1, inicio: 1, "término": 1, detalle: 1 };
+  function evidencia(ev, k, v) {
+    var ms = (ev && ev.vinculos && ev.vinculos[k] || []).filter(function (m) {
+      return (v.fuentes || []).some(function (f) { return f && f[1] === m.url; }); });
+    var cub = {}; ms.forEach(function (m) { if (m.vigente !== false) (m.cubre || []).forEach(function (c) { if (PARTES[c]) cub[c] = 1; }); });
+    var falta = [];
+    if (!cub.papel) falta.push("papel");
+    if (v.desde && !cub.inicio) falta.push("inicio");
+    if (v.hasta && !cub["término"]) falta.push("término");
+    return { frases: ms, falta: ms.length ? falta : [], hay: ms.length > 0, perdida: ms.some(function (m) { return m.vigente === false; }) };
+  }
+  /* Enlace que abre la fuente en la frase, cuando el navegador lo admite. */
+  function saltoA(m) {
+    function c(s) { return encodeURIComponent(s).replace(/-/g, "%2D"); }
+    var s = m.salto || [];
+    return !s[0] ? m.url : m.url.split("#")[0] + "#:~:text=" + c(s[0]) + (s[1] ? "," + c(s[1]) : "");
+  }
+  function pendientes(reg, hoy, ev) {
     var out = [], doc = {};
     Object.keys(reg.vinculos).forEach(function (k) {
       var v = reg.vinculos[k], r = respaldo(v), p = reg.personas[v.personaId];
@@ -158,6 +176,12 @@
       else if (r.id === "terciaria") pon("SOLO WIKIPEDIA", "Buscar la fuente primaria.");
       else if (r.id === "una") pon("UNA SOLA FUENTE", "Contrastar con un registro oficial o un segundo medio.");
       else if (r.id === "propia") pon("LO DECLARA LA FUENTE", "Contrastar con un registro independiente.");
+      if (ev) {
+        var e = evidencia(ev, k, v);
+        if (!e.hay) pon("SIN FRASE LOCALIZADA", "Ubicar en la fuente la frase que lo sostiene.");
+        if (e.perdida) pon("LA FRASE YA NO ESTÁ", "La página cambió: buscar una copia archivada o retirar el vínculo.");
+        else if (e.falta.length) pon("DATO DEDUCIDO", "Ninguna frase da el " + e.falta.join(" ni el ") + ": buscar una que lo diga o dejarlo en blanco.");
+      }
       if (!rango(v.desde) && !rango(v.hasta)) pon("SIN FECHAS", "Fechar el vínculo: sin fechas no se puede saber con quién coincidió.");
       var di = rango(v.desde), hf = rango(v.hasta);
       if (di && hf && di[0] > hf[1]) pon("FECHAS CRUZADAS", "El término es anterior al inicio: revisar la fuente.");
@@ -168,6 +192,11 @@
       var solo = doc[u].filter(function (k) { return reg.vinculos[k].fuentes.length === 1; });
       if (solo.length >= 5) out.push({ clase: "DOCUMENTO CRÍTICO", url: u, texto: dominio(u) + " sostiene solo " + solo.length + " afirmaciones",
         pide: "Guardar una copia y buscar un segundo respaldo." });
+    });
+    Object.keys(ev && ev.documentos || {}).forEach(function (u) {
+      var d = ev.documentos[u];
+      if (d.estado === "caida") out.push({ clase: "FUENTE CAÍDA", url: u, texto: dominio(u) + " ya no responde con esa página", pide: "Buscar una copia archivada." });
+      if (d.estado === "sin respuesta") out.push({ clase: "FUENTE SIN COMPROBAR", url: u, texto: dominio(u) + " no dejó comprobarla el " + d.intento, pide: "Abrirla a mano." });
     });
     posiblesDuplicados(Object.keys(reg.organizaciones).map(function (k) { return { id: k, nombre: reg.organizaciones[k].nombre }; }))
       .forEach(function (d) { out.push({ clase: "¿MISMA ORGANIZACIÓN?", orgs: [d[0].id, d[1].id], texto: d[0].nombre + " / " + d[1].nombre,
@@ -218,5 +247,5 @@
 
   return { norm: norm, dominio: dominio, casa: casa, respaldo: respaldo, conRespaldo: conRespaldo, rango: rango, solapan: solapan,
     tiempoComun: tiempoComun, caminos: caminos, eslabonDebil: eslabonDebil, puentes: puentes, posiblesDuplicados: posiblesDuplicados,
-    pendientes: pendientes, buscar: buscar, csv: csv, gexf: gexf };
+    evidencia: evidencia, saltoA: saltoA, pendientes: pendientes, buscar: buscar, csv: csv, gexf: gexf };
 });

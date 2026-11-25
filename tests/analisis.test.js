@@ -89,3 +89,19 @@ test("búsqueda en afirmaciones y salidas seguras", () => {
   const g = A.gexf([{ id: 'a"<', label: "A & B", clase: "p" }], [e("a", "b")]);
   assert.ok(g.includes("A &amp; B") && g.includes("a&quot;&lt;"));
 });
+
+test("evidencia: lo deducido y lo perdido quedan a la vista", () => {
+  const v = { desde: "2005", hasta: "", fuentes: f("https://a.cl/x"), registro: "registro" };
+  const m = (o) => ({ url: "https://a.cl/x", cubre: ["papel"], salto: ["uno dos", "tres"], ...o });
+  const E = ms => A.evidencia({ vinculos: { k: ms } }, "k", v);
+  assert.equal(E([]).hay, false);
+  assert.deepEqual(E([m()]).falta, ["inicio"]);
+  assert.deepEqual(E([m({ cubre: ["papel", "inicio"] })]).falta, []);
+  assert.equal(E([m({ vigente: false })]).perdida, true);
+  assert.equal(E([m({ url: "https://otra.cl" })]).hay, false);
+  assert.equal(A.saltoA(m({ salto: ["a-b c", "d"] })), "https://a.cl/x#:~:text=a%2Db%20c,d");
+  const reg = { personas: {}, organizaciones: {}, vinculos: { k: { ...v, personaId: "p", tipo: "cargo" } } };
+  assert.ok(A.pendientes(reg, 20261125, { vinculos: { k: [m()] } }).some(x => x.clase === "DATO DEDUCIDO"));
+  assert.ok(A.pendientes(reg, 20261125, { vinculos: {} }).some(x => x.clase === "SIN FRASE LOCALIZADA"));
+  assert.ok(!A.pendientes(reg, 20261125).some(x => /FRASE|DEDUCIDO/.test(x.clase)));
+});
