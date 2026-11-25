@@ -18,6 +18,7 @@
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Telar · Registro de influencia pública</title>
+<script src="analisis.js"></script>
 <script>
 /* Lectura por omisión. Con ?taller la app se edita en este navegador. */
 if(new URLSearchParams(location.search).has("taller")) document.write('<script src="telar-open.js"><\/script>');
@@ -256,6 +257,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--cy)}
 .claim .rol{font-size:calc(9px * var(--k));color:var(--txt-dim);margin-top:2px;overflow-wrap:anywhere}
 .claim .det{font-size:calc(8.5px * var(--k));color:var(--txt-faint);line-height:1.6;margin-top:4px;letter-spacing:.02em;overflow-wrap:anywhere}
 .claim .mt{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin-top:5px}
+.claim .acc{gap:4px 10px}
+.claim .acc button,.claim .acc a{font-size:calc(7.5px * var(--k));letter-spacing:.16em;color:var(--txt-faint);padding:2px 0;text-decoration:none;border-bottom:1px dotted var(--line-2)}
+.claim .acc button:hover,.claim .acc a:hover{color:var(--cy)}
+.resp{font-size:calc(7.5px * var(--k));letter-spacing:.14em;padding:1px 5px;border:1px solid currentColor;white-space:nowrap}
+.resp.r0{color:var(--rd)} .resp.r1{color:var(--am)} .resp.r2{color:var(--am)} .resp.r3{color:var(--gr)} .resp.r4{color:var(--cy)}
+.tarea{padding:6px 0;border-top:1px dotted rgba(120,190,210,.12);display:block;width:100%;text-align:left}
+.tarea b{display:block;font-size:calc(9px * var(--k));font-weight:500;color:var(--txt);overflow-wrap:anywhere}
+.tarea span{display:block;font-size:calc(8px * var(--k));color:var(--txt-faint);line-height:1.5;margin-top:2px}
+button.tarea:hover b{color:var(--cy)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.cmp div{border:1px solid var(--line);padding:5px 7px;font-size:calc(8.5px * var(--k));color:var(--txt-dim);line-height:1.5;overflow-wrap:anywhere}
+.cmp div i{font-style:normal;color:var(--txt-faint);display:block}
 .claim .yr{font-size:calc(8px * var(--k));letter-spacing:.14em;color:var(--txt-faint);font-variant-numeric:tabular-nums}
 .claim .amt{font-size:calc(8.5px * var(--k));color:var(--gr);font-variant-numeric:tabular-nums}
 .prov{font-size:calc(7.5px * var(--k));letter-spacing:.18em;padding:2px 5px;border:1px solid currentColor}
@@ -412,7 +425,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--cy)}
   .rail-left{left:6px} .rail-right{right:6px}
   .rail button[data-tip]:hover::after{display:none}
   .timeline{left:6px;right:6px;bottom:calc(6px + env(safe-area-inset-bottom,0px))}
-  .mapctl{display:none}
+  .mapctl{right:6px;bottom:calc(var(--tl) + 22px + env(safe-area-inset-bottom,0px))}
+  .mapctl button{width:calc(30px * var(--k));height:calc(30px * var(--k))}
   .voidmsg{top:46%}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -473,9 +487,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--cy)}
   </aside>
 
   <div class="mapctl">
-    <button id="btnIn" title="Acercar">+</button>
-    <button id="btnOut" title="Alejar">−</button>
-    <button id="btnReset" title="Reencuadrar (R)">⟲</button>
+    <button id="btnIn" title="Acercar (+)" aria-label="Acercar">+</button>
+    <button id="btnOut" title="Alejar (−)" aria-label="Alejar">−</button>
+    <button id="btnReset" title="Reencuadrar (R)" aria-label="Reencuadrar">⟲</button>
+    <button id="btnSel" title="Encuadrar la selección (F)" aria-label="Encuadrar la selección">◎</button>
   </div>
 
   <div class="mapinfo" id="mapinfo" hidden></div>
@@ -682,7 +697,25 @@ function inWindow(v){
   if(a!=null&&b==null) hi=yMax==null?a:yMax;
   return hi>=wA && lo<=wB;
 }
-function activeLink(v){ return dimOn[v.tipo]!==false && provOn[v.registro]!==false && inWindow(v); }
+var TA=window.TelarAnalisis, soloRespaldo=false;
+function activeLink(v){ return dimOn[v.tipo]!==false && provOn[v.registro]!==false && inWindow(v) && (!soloRespaldo || v._fuente || TA.conRespaldo(v)); }
+function copiar(t,ok){
+  try{ navigator.clipboard.writeText(t).then(function(){ toast(ok); },function(){ toast("El navegador no dejó copiar.",1); }); }
+  catch(e){ toast("El navegador no dejó copiar.",1); }
+}
+function enlaceFicha(n){ return location.origin+location.pathname+(n.kind==="p"?"#p-":"#o-")+n.key; }
+function regActual(){
+  var r={personas:{},organizaciones:{},vinculos:{}};
+  personas.forEach(function(p,k){ r.personas[k]=p; }); orgs.forEach(function(o,k){ r.organizaciones[k]=o; });
+  vincs.forEach(function(v,i){ r.vinculos[v._id||("v"+i)]=v; }); return r;
+}
+function hoyNum(){ var d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
+function citaDe(v){
+  var S=srcs(v), hoy=new Date().toISOString().slice(0,10);
+  return nameOf("persona:"+v.personaId)+" — "+(v.etiqueta||v.tipo)+" — "+nameOf(v.contraparte)+" ("+spanTxt(v)+"). "+(v.detalle?v.detalle+" ":"")
+    +"Respaldo: "+TA.respaldo(v).lb.toLowerCase()+". Fuente: "+(S.length?S.map(function(s){ return s[0]+", "+s[1]; }).join("; "):"SIN FUENTE")
+    +". Registro Telar, consultado el "+hoy+".";
+}
 function matchNode(n){
   var q=query.trim().toLowerCase(); if(!q) return true;
   if(n.label.toLowerCase().indexOf(q)>=0) return true;
@@ -999,7 +1032,7 @@ function draw(){
   labels.forEach(function(E2){
     var n=E2.n, P=E2.P, r=E2.r;
     var lb=n.label.length>26?n.label.slice(0,25)+"…":n.label;
-    ctx.font=(n.kind==="p"?"600 ":"400 ")+Math.round(10*Math.min(1.25,Math.max(.85,sc)))+'px ui-monospace,"SF Mono",Menlo,monospace';
+    ctx.font=(n.kind==="p"?"600 ":"400 ")+Math.round(10*ui*Math.min(1.25,Math.max(.85,sc)))+'px ui-monospace,"SF Mono",Menlo,monospace';
     var tw=ctx.measureText(lb).width;
     var box=[P[0]-tw/2-3, P[1]+r+3, tw+6, 13], hit=false;
     for(var i=0;i<taken.length;i++){
@@ -1087,7 +1120,7 @@ function avail(){
     if(!$("dossier").hidden) aw-=$("dossier").offsetWidth+30;
     if(!$("panel").hidden) aw-=$("panel").offsetWidth+30;
   }
-  ah-=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--tl"))||70)+40;
+  ah-=54*KBASE*ui+40;
   return [Math.max(240,aw),Math.max(200,ah)];
 }
 function updZoom(){ var e=$("sbZoom"); if(e) e.textContent="Z "+cam().z.toFixed(2); }
@@ -1105,17 +1138,30 @@ function setMode(m){
 /* ─── interacción del lienzo ─── */
 (function(){
   var dragging=false, dragNode=null, lx=0, ly=0, moved=0;
+  var dedos=new Map(), pinza=null, toque={t:0,x:0,y:0};
   function pos(ev){ var r=cv.getBoundingClientRect(); return [ev.clientX-r.left, ev.clientY-r.top]; }
+  function medir(){ var d=Array.from(dedos.values());
+    return {x:(d[0][0]+d[1][0])/2, y:(d[0][1]+d[1][1])/2, d:Math.max(12,Math.hypot(d[0][0]-d[1][0],d[0][1]-d[1][1]))}; }
+  function soltarNodo(){ if(dragNode){ dragNode.fixed=false; dragNode=null; } }
   cv.addEventListener("pointerdown",function(ev){
     cv.setPointerCapture(ev.pointerId);
-    var p=pos(ev); lx=p[0]; ly=p[1]; moved=0; dragging=true; fly=null;
+    var p=pos(ev); dedos.set(ev.pointerId,p); fly=null;
+    if(dedos.size===2){ soltarNodo(); dragging=false; moved=99; pinza=medir(); return; }
+    if(dedos.size>2) return;
+    lx=p[0]; ly=p[1]; moved=0; dragging=true;
     dragNode = MODE==="grafo" ? pick(p[0],p[1]) : null;
-    if(MODE==="mapa") dragNode=null;
     if(dragNode) dragNode.fixed=true;
     cv.classList.add("drag");
   });
   cv.addEventListener("pointermove",function(ev){
     var p=pos(ev);
+    if(dedos.has(ev.pointerId)) dedos.set(ev.pointerId,p);
+    if(pinza){
+      if(dedos.size<2) return;
+      var m=medir(), c0=cam();
+      c0.x-=(m.x-pinza.x)/c0.z; c0.y-=(m.y-pinza.y)/c0.z;   /* dos dedos también desplazan */
+      zoomEn(m.x,m.y,m.d/pinza.d); pinza=m; return;
+    }
     if(!dragging){
       var h=pick(p[0],p[1]);
       if(h!==hover){ hover=h; cv.classList.toggle("over",!!h); draw(); }
@@ -1125,38 +1171,82 @@ function setMode(m){
     if(dragNode){ dragNode.x+=dx/camG.z; dragNode.y+=dy/camG.z; needSim=Math.max(needSim,36); tick(); }
     else { var c=cam(); c.x-=dx/c.z; c.y-=dy/c.z; draw(); }
   });
-  function up(){
+  function up(ev){
+    dedos.delete(ev.pointerId);
+    if(pinza){ if(!dedos.size){ pinza=null; cv.classList.remove("drag"); } return; }
     if(!dragging) return;
     dragging=false; cv.classList.remove("drag");
-    if(dragNode){ dragNode.fixed=false; if(moved<4) select(dragNode); dragNode=null; }
-    else if(moved<4){ var n=pick(lx,ly); select(n||null); }
+    var limpio=moved<6 && ev.type==="pointerup", n=dragNode || (limpio?pick(lx,ly):null);
+    soltarNodo();
+    if(!limpio) return;
+    select(n||null);
+    if(ev.pointerType==="touch"){           /* doble toque: acerca donde se tocó */
+      var ya=Date.now();
+      if(ya-toque.t<320 && Math.hypot(lx-toque.x,ly-toque.y)<28){ zoomEn(lx,ly,1.9); toque.t=0; }
+      else toque={t:ya,x:lx,y:ly};
+    }
   }
   cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
   cv.addEventListener("wheel",function(ev){
-    ev.preventDefault(); fly=null;
-    var r=cv.getBoundingClientRect(), mx=ev.clientX-r.left, my=ev.clientY-r.top, c=cam();
-    var wx=c.x+(mx-W/2)/c.z, wy=c.y+(my-H/2)/c.z;
-    var lim = MODE==="mapa"?[.35,160]:[.15,4];
-    c.z=Math.max(lim[0],Math.min(lim[1],c.z*(ev.deltaY<0?1.14:0.877)));
-    c.x=wx-(mx-W/2)/c.z; c.y=wy-(my-H/2)/c.z;
-    updZoom(); draw();
+    ev.preventDefault();
+    var r=cv.getBoundingClientRect(), dy=ev.deltaY*(ev.deltaMode===1?16:ev.deltaMode===2?H:1);
+    /* ctrlKey: gesto de pellizco de un panel táctil */
+    zoomEn(ev.clientX-r.left, ev.clientY-r.top, Math.exp(-Math.max(-120,Math.min(120,dy))*(ev.ctrlKey?0.010:0.0014)));
   },{passive:false});
   cv.addEventListener("dblclick",function(ev){
-    var r=cv.getBoundingClientRect(), n=pick(ev.clientX-r.left,ev.clientY-r.top);
-    if(!n) return;
+    var r=cv.getBoundingClientRect(), x=ev.clientX-r.left, y=ev.clientY-r.top, n=pick(x,y);
+    if(!n){ zoomEn(x,y,ev.shiftKey?1/1.9:1.9); return; }
     select(n);
     if(MODE==="mapa"){ if(n.ll) flyTo(n.ll[0],n.ll[1],Math.max(camM.z,9)); }
     else { camG.x=n.x; camG.y=n.y; camG.z=Math.max(camG.z,1.1); updZoom(); draw(); }
   });
 })();
-$("btnIn").onclick=function(){ var c=cam(); fly=null; c.z=Math.min(MODE==="mapa"?160:4,c.z*1.3); updZoom(); draw(); };
-$("btnOut").onclick=function(){ var c=cam(); fly=null; c.z=Math.max(MODE==="mapa"?.35:.15,c.z/1.3); updZoom(); draw(); };
+function limZoom(){ return MODE==="mapa"?[.35,160]:[.08,8]; }
+function zoomEn(mx,my,f){
+  fly=null; var c=cam(), l=limZoom(), wx=c.x+(mx-W/2)/c.z, wy=c.y+(my-H/2)/c.z;
+  c.z=Math.max(l[0],Math.min(l[1],c.z*f));
+  c.x=wx-(mx-W/2)/c.z; c.y=wy-(my-H/2)/c.z;
+  updZoom(); draw();
+}
+/* Encuadra la selección y sus vecinos directos. */
+function encuadrarSel(){
+  if(!sel){ fit(); return; }
+  if(MODE==="mapa"){ if(sel.ll) flyTo(sel.ll[0],sel.ll[1],Math.max(camM.z,12)); else toast("Esa entidad no tiene ubicación registrada."); return; }
+  var g=[sel]; sel.links.forEach(function(L){ if(activeLink(L.v)) g.push(L.a===sel?L.b:L.a); });
+  var xs=g.map(function(n){return n.x;}), ys=g.map(function(n){return n.y;});
+  var x1=Math.min.apply(null,xs), x2=Math.max.apply(null,xs), y1=Math.min.apply(null,ys), y2=Math.max.apply(null,ys), av=avail();
+  camG.x=(x1+x2)/2; camG.y=(y1+y2)/2;
+  camG.z=Math.max(.2,Math.min(3,Math.min(av[0]/Math.max(160,x2-x1+200),av[1]/Math.max(140,y2-y1+160))));
+  if(!$("dossier").hidden && W>700) camG.x+=($("dossier").offsetWidth+30)/2/camG.z;
+  if(!$("panel").hidden && W>700) camG.x-=($("panel").offsetWidth+30)/2/camG.z;
+  updZoom(); draw();
+}
+/* ─── tamaño de la interfaz ─── */
+var KBASE=1.3, ui=1;
+function ponerUi(x,guardar){
+  ui=Math.max(.7,Math.min(1.8,Math.round(x*20)/20));
+  document.documentElement.style.setProperty("--k",String(KBASE*ui));
+  if(guardar){ try{ localStorage.setItem("telar.ui",String(ui)); }catch(e){} toast("Tamaño de la interfaz: "+Math.round(ui*100)+" %"); }
+  resize(); drawTl();
+}
+try{ var uiG=parseFloat(localStorage.getItem("telar.ui")); if(uiG>=.7&&uiG<=1.8) ui=uiG; }catch(e){}
+$("btnIn").onclick=function(){ zoomEn(W/2,H/2,1.35); };
+$("btnOut").onclick=function(){ zoomEn(W/2,H/2,1/1.35); };
 $("btnReset").onclick=function(){ fit(); };
+$("btnSel").onclick=encuadrarSel;
 window.addEventListener("resize",resize);
 document.addEventListener("keydown",function(e){
   if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)){ if(e.key==="Escape") e.target.blur(); return; }
   if(e.key==="Escape"){ if(!$("sheet").hidden) closeSheet(); else { select(null); closePanel(); } }
-  if(e.key==="r"||e.key==="R") fit();
+  if(e.ctrlKey||e.metaKey||e.altKey) return;      /* el zoom del navegador sigue siendo del navegador */
+  if(e.key==="r"||e.key==="R"||e.key==="0") fit();
+  if(e.key==="f"||e.key==="F") encuadrarSel();
+  if(e.key==="+"||e.key==="=") zoomEn(W/2,H/2,1.25);
+  if(e.key==="-"||e.key==="_") zoomEn(W/2,H/2,1/1.25);
+  if(e.target===document.body && /^Arrow/.test(e.key)){ var cf=cam(), paso=70/cf.z; fly=null;
+    if(e.key==="ArrowLeft") cf.x-=paso; if(e.key==="ArrowRight") cf.x+=paso;
+    if(e.key==="ArrowUp") cf.y-=paso; if(e.key==="ArrowDown") cf.y+=paso;
+    e.preventDefault(); draw(); }
   if(e.key==="m"||e.key==="M") setMode(MODE==="mapa"?"grafo":"mapa");
 });
 
@@ -1176,6 +1266,7 @@ function select(n){
   if(n){ location.hash = (n.kind==="p"?"#p-":"#o-")+n.key; }
   else if(location.hash) location.hash="";
   renderDossier(); draw();
+  if(panelMode==="exp") openPanel("exp","EXPORTAR",buildExportar);
 }
 function claimEl(v, fromPersona){
   var S=srcs(v), pv=PROVS.filter(function(p){return p.id===v.registro;})[0];
@@ -1195,6 +1286,12 @@ function claimEl(v, fromPersona){
   if(S.length) S.forEach(function(s){ mt.appendChild(el("a",{class:"src",href:s[1],target:"_blank",rel:"noopener noreferrer nofollow",text:s[0]})); });
   else mt.appendChild(el("span",{class:"nosrc",text:"SIN FUENTE"}));
   box.appendChild(mt);
+  var rp=TA.respaldo(v), ac=el("div",{class:"mt acc"});
+  ac.appendChild(el("span",{class:"resp r"+rp.nivel,title:"Qué sostiene esta afirmación. No significa que esté confirmada.",text:rp.lb}));
+  ac.appendChild(el("button",{type:"button",text:"CITAR",onclick:function(){ copiar(citaDe(v),"Cita copiada, con su fuente."); }}));
+  S.slice(0,3).forEach(function(s,i){ ac.appendChild(el("a",{href:"https://web.archive.org/web/*/"+s[1],target:"_blank",rel:"noopener noreferrer nofollow",
+    title:"Copias guardadas de "+hostOf(s[1]),text:"ARCHIVO"+(S.length>1?" "+(i+1):"")})); });
+  box.appendChild(ac);
   if(canEdit && v._id && !estatico){
     var rt=el("div",{class:"mt",style:"margin-top:4px"});
     rt.appendChild(el("button",{type:"button",style:"font-size:calc(7.5px * var(--k));letter-spacing:.18em;color:var(--txt-faint);padding:0",
@@ -1251,8 +1348,17 @@ function renderDossier(){
     el("span",{style:"font-size:calc(7.5px * var(--k));letter-spacing:.22em;color:var(--txt-faint);width:100%;margin-bottom:3px",text:"BUSCAR EN LA WEB"}),
     el("button",{class:"mini",type:"button",text:"WEB",onclick:function(){ buscarWeb(_qb,"web"); }}),
     el("button",{class:"mini",type:"button",text:"NOTICIAS",onclick:function(){ buscarWeb(_qb,"noticias"); }}),
-    el("button",{class:"mini",type:"button",text:"REGISTROS",onclick:function(){ buscarWeb(_qb,"registro"); }})
+    el("button",{class:"mini",type:"button",text:"REGISTROS",onclick:function(){ buscarWeb(_qb,"registro"); }}),
+    el("button",{class:"mini",type:"button",text:"COPIAR ENLACE",onclick:function(){ copiar(enlaceFicha(sel),"Enlace de la ficha copiado."); }})
   ]));
+  if(mine.length){
+    var rs={}; mine.forEach(function(v){ var x=TA.respaldo(v); rs[x.lb]=rs[x.lb]||{n:0,nivel:x.nivel}; rs[x.lb].n++; });
+    var caja=el("div",{class:"ds-sec",style:"padding:8px 11px;display:flex;gap:5px;flex-wrap:wrap"},[
+      el("span",{style:"font-size:calc(7.5px * var(--k));letter-spacing:.22em;color:var(--txt-faint);width:100%;margin-bottom:2px",text:"QUÉ SOSTIENE ESTA FICHA"})]);
+    Object.keys(rs).sort(function(a,c){ return rs[c].nivel-rs[a].nivel; }).forEach(function(k){
+      caja.appendChild(el("span",{class:"resp r"+rs[k].nivel,text:rs[k].n+" · "+k})); });
+    b.appendChild(caja);
+  }
 
   if(isP && Array.isArray(rec.alias) && rec.alias.length)
     b.appendChild(el("div",{class:"ds-note",text:"También: "+rec.alias.join(", ")}));
@@ -1285,7 +1391,7 @@ function renderDossier(){
         var who=el("div",{class:"who"});
         who.appendChild(el("button",{type:"button",text:otro.label,onclick:function(){ select(otro); centerOn(otro); }}));
         box.appendChild(who);
-        box.appendChild(el("div",{class:"det",text:T.orgs.map(function(o){return o.label;}).join(" · ")}));
+        box.appendChild(el("div",{class:"det",text:T.orgs.map(function(o){ var t=tiempoTxt(T.a,T.b,o); return o.label+(t?" ("+t.x+")":""); }).join(" · ")}));
         st.appendChild(box);
       });
       b.appendChild(st);
@@ -1400,11 +1506,99 @@ function coincidencias(){
   });
   return [...pares.values()].sort(function(x,y){ return y.orgs.length-x.orgs.length; });
 }
+/* Vínculos activos entre una persona y una organización. */
+function entre(p,o){ return p.links.filter(function(L){ return activeLink(L.v) && !L.v._fuente && (L.a===o||L.b===o); }).map(function(L){ return L.v; }); }
+function tiempoTxt(p,q,o){
+  var a=entre(p,o), c=entre(q,o); if(!a.length||!c.length) return null;
+  var t=TA.tiempoComun(a,c);
+  var hoy=new Date().getFullYear();
+  return t.r==="si" ? {k:"si",x: t.desde>hoy ? "a la vez según los plazos, desde "+t.desde
+      : t.hasta>hoy ? "a la vez desde "+t.desde+", con plazo hasta "+t.hasta
+      : "a la vez"+(t.desde===t.hasta?" en "+t.desde:", "+t.desde+"–"+t.hasta)}
+    : t.r==="no" ? {k:"no",x:"en épocas distintas"} : {k:"?",x:"las fechas no alcanzan para saberlo"};
+}
 function ranking(kind){
   return nodes.filter(function(n){ return n.kind===kind; })
     .map(function(n){ return {n:n,c:n.links.filter(function(L){ return activeLink(L.v); }).length}; })
     .filter(function(r){ return r.c>0; })
     .sort(function(a,b){ return b.c-a.c || a.n.label.localeCompare(b.n.label,"es"); });
+}
+function buildZoom(body){
+  body.appendChild(el("div",{class:"grp"},[el("span",{text:"TAMAÑO DE LA INTERFAZ"}),el("span",{id:"uiPct",text:Math.round(ui*100)+" %"})]));
+  function mover(d){ return function(){ ponerUi(d===0?1:ui+d,true); var e=$("uiPct"); if(e) e.textContent=Math.round(ui*100)+" %"; }; }
+  body.appendChild(el("div",{class:"fld",style:"display:flex;gap:5px"},[
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"A−","aria-label":"Reducir la interfaz",onclick:mover(-.1)}),
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"100 %",onclick:mover(0)}),
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"A+","aria-label":"Agrandar la interfaz",onclick:mover(.1)})]));
+  body.appendChild(el("div",{class:"grp"},[el("span",{text:"GRAFO Y MAPA"}),el("span",{text:"ZOOM"})]));
+  body.appendChild(el("div",{class:"fld",style:"display:flex;gap:5px"},[
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"−","aria-label":"Alejar",onclick:function(){ zoomEn(W/2,H/2,1/1.35); }}),
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"TODO",onclick:function(){ fit(); }}),
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"SELECCIÓN",onclick:encuadrarSel}),
+    el("button",{class:"mini",style:"flex:1",type:"button",text:"+","aria-label":"Acercar",onclick:function(){ zoomEn(W/2,H/2,1.35); }})]));
+  var d=el("div",{class:"doc"});
+  [["Pantalla táctil","Pellizca con dos dedos para acercar o alejar, y muévelos juntos para desplazarte. Doble toque acerca."],
+   ["Ratón","La rueda acerca hacia el puntero. Doble clic en un vacío acerca; con Mayúsculas, aleja."],
+   ["Panel táctil","Pellizca sobre el grafo o el mapa."],
+   ["Teclado","+ y − acercan y alejan, 0 o R encuadran todo, F encuadra la selección y las flechas desplazan. M cambia entre grafo y mapa."]
+  ].forEach(function(r){ d.appendChild(el("div",{class:"r"},[el("b",{text:r[0]}),el("span",{text:r[1]})])); });
+  body.appendChild(d);
+}
+function aristasActivas(){
+  return links.filter(function(L){ return activeLink(L.v) && !L.v._fuente && !L.v._derivado; })
+    .map(function(L){ return {a:L.a.id,b:L.b.id,v:L.v,L:L}; });
+}
+/* ═══════════ verificación: lo que falta comprobar ═══════════ */
+var pendClase="";
+function buildPendientes(body){
+  var todo=TA.pendientes(regActual(),hoyNum()), cl={};
+  todo.forEach(function(t){ cl[t.clase]=(cl[t.clase]||0)+1; });
+  body.appendChild(el("div",{class:"hint"},[el("b",{text:"Qué falta comprobar. "}),
+    document.createTextNode("Se calcula desde el propio registro, sin modelos: dónde una afirmación se apoya en poco, no tiene fechas o depende de un solo documento. Son tareas, no acusaciones.")]));
+  var s=el("select",{"aria-label":"Clase de tarea",onchange:function(){ pendClase=s.value; openPanel("pend","VERIFICACIÓN",buildPendientes); }});
+  s.appendChild(el("option",{value:"",text:"TODAS · "+todo.length}));
+  Object.keys(cl).sort(function(a,b){ return cl[b]-cl[a]; }).forEach(function(k){ s.appendChild(el("option",{value:k,text:k+" · "+cl[k]})); });
+  s.value=cl[pendClase]?pendClase:"";
+  var caja=el("div",{class:"antool"}); caja.appendChild(s);
+  caja.appendChild(el("button",{class:"mini",style:"width:100%",type:"button",text:"EXPORTAR LISTA DE TAREAS",onclick:function(){
+    var md="# Telar — lista de verificación\n\n"+new Date().toISOString().slice(0,10)+". "+todo.length+" tareas, calculadas desde el registro.\n";
+    Object.keys(cl).forEach(function(k){ md+="\n## "+k+"\n\n"; todo.filter(function(t){ return t.clase===k; }).forEach(function(t){
+      md+="- [ ] "+t.texto+(t.url?" — "+t.url:"")+". "+t.pide+"\n"; }); });
+    bajar("telar-verificacion-"+new Date().toISOString().slice(0,10)+".md",md,"text/markdown"); }}));
+  todo.filter(function(t){ return !s.value||t.clase===s.value; }).slice(0,200).forEach(function(t){
+    var n = t.persona?nodeBy.get("persona:"+t.persona):t.orgs?nodeBy.get("org:"+t.orgs[0]):null;
+    var dentro=[el("b",{text:t.texto}),el("span",{text:t.clase+" · "+t.pide})];
+    caja.appendChild(n?el("button",{class:"tarea",type:"button",onclick:function(){ select(n); centerOn(n); }},dentro)
+      : t.url?el("a",{class:"tarea",href:safeUrl(t.url)||"#",target:"_blank",rel:"noopener noreferrer nofollow",style:"text-decoration:none"},dentro):el("div",{class:"tarea"},dentro));
+  });
+  if(!todo.length) caja.appendChild(el("p",{class:"d",text:"Nada pendiente con las reglas actuales."}));
+  body.appendChild(caja);
+}
+/* ═══════════ exportar ═══════════ */
+function bajar(nom,txt,tipo){
+  try{ var a=document.createElement("a"), u=URL.createObjectURL(new Blob([txt],{type:tipo+";charset=utf-8"}));
+    a.href=u; a.download=nom; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },500); toast("Descargado: "+nom); }
+  catch(e){ toast("La descarga no está disponible en esta vista.",1); }
+}
+function buildExportar(body){
+  var ar=aristasActivas(), base="telar-"+(sel?sel.key:"registro")+"-"+new Date().toISOString().slice(0,10);
+  var mias=sel&&sel.kind!=="d"?ar.filter(function(e){ return e.a===sel.id||e.b===sel.id; }):ar;
+  body.appendChild(el("div",{class:"hint",text:(sel&&sel.kind!=="d"?"Se exporta la ficha seleccionada: "+sel.label+". ":"Se exporta todo el registro. ")
+    +mias.length+" vínculos con los filtros activos. Cada salida lleva las fuentes y el respaldo; lo filtrado no aparece."}));
+  function b(t,fn){ return el("button",{class:"mini",style:"width:100%;margin-bottom:5px",type:"button",text:t,onclick:fn}); }
+  body.appendChild(el("div",{class:"fld"},[
+    b("DOSIER · MARKDOWN",function(){ exportar(); }),
+    b("TABLA · CSV (EXCEL)",function(){ bajar(base+".csv",TA.csv(mias.map(function(e){ var v=e.v; return [nameOf("persona:"+v.personaId),v.tipo,nameOf(v.contraparte),
+      v.etiqueta,v.desde,v.hasta,v.monto,v.moneda,v.registro,TA.respaldo(v).lb,v.detalle,srcs(v).map(function(s){ return s[1]; }).join(" ")]; })),"text/csv"); }),
+    b("GRAFO · GEXF (GEPHI)",function(){ var us=new Set(); mias.forEach(function(e){ us.add(e.a); us.add(e.b); });
+      bajar(base+".gexf",TA.gexf([...us].map(function(i){ var n=nodeBy.get(i); return {id:i,label:n?n.label:i,clase:n&&n.kind==="p"?"persona":"organizacion"}; }),mias),"application/xml"); }),
+    b("DATOS · JSON",function(){ var r={generado:new Date().toISOString(),personas:{},organizaciones:{},vinculos:{}}, t=regActual(), us=new Set();
+      mias.forEach(function(e){ us.add(e.a); us.add(e.b); });
+      us.forEach(function(i){ var k=idOf(i); if(kindOf(i)==="persona"){ if(t.personas[k]) r.personas[k]=t.personas[k]; } else if(t.organizaciones[k]) r.organizaciones[k]=t.organizaciones[k]; });
+      mias.forEach(function(e,i){ var c=Object.assign({},e.v); delete c._id; r.vinculos[e.v._id||("v"+i)]=c; });
+      bajar(base+".json",JSON.stringify(r,null,1),"application/json"); })
+  ]));
 }
 function buildAnalisis(body){
   /* ── camino entre dos entidades ── */
@@ -1449,14 +1643,60 @@ function buildAnalisis(body){
     out.appendChild(el("p",{class:"d",style:"margin-top:8px",text:(ch.length-1)+" salto"+(ch.length-1===1?"":"s")+". Resaltado en blanco sobre el lienzo."}));
     out.appendChild(box);
   }});
-  t1.appendChild(go); t1.appendChild(out);
+  t1.appendChild(go);
+  t1.appendChild(el("button",{class:"mini",style:"width:100%;margin-top:5px",type:"button",text:"VER CAMINOS ALTERNATIVOS",onclick:function(){
+    clr(out); pathNodes=null; pathEdges=null;
+    if(!sA.value||!sB.value||sA.value===sB.value){ out.appendChild(el("p",{class:"d",text:"Elige origen y destino distintos."})); draw(); return; }
+    var ar=aristasActivas(), cs=TA.caminos(ar,sA.value,sB.value,5,6);
+    if(!cs.length){ out.appendChild(el("p",{class:"d",text:"No hay caminos de hasta cinco saltos con los filtros activos."})); draw(); return; }
+    out.appendChild(el("p",{class:"d",style:"margin-top:8px",text:cs.length+(cs.length===1?" camino":" caminos")+" de hasta cinco saltos. Cada uno vale lo que su eslabón más débil. Estar conectado no es tener relación: pulsa uno para verlo."}));
+    cs.forEach(function(c){
+      var w=TA.eslabonDebil(c);
+      out.appendChild(el("button",{class:"tarea",type:"button",onclick:function(){
+        pathNodes=new Set(c.map(function(p){ return p.n; })); pathEdges=new Set(c.filter(function(p){ return p.e; }).map(function(p){ return p.e.L; })); draw(); }},[
+        el("b",{text:c.map(function(p){ var n=nodeBy.get(p.n); return n?n.label:p.n; }).join(" → ")}),
+        el("span",{text:(c.length-1)+(c.length===2?" salto":" saltos")+" · eslabón más débil: "+w.lb.toLowerCase()})]));
+    });
+    draw();
+  }}));
+  t1.appendChild(out);
   body.appendChild(t1);
+
+  /* ── comparar dos entidades ── */
+  var tc=el("div",{class:"antool"});
+  tc.appendChild(el("h5",{text:"COMPARAR DOS PERSONAS"}));
+  tc.appendChild(el("p",{class:"d",text:"Qué comparten y qué no, con el tiempo en común de cada organización."}));
+  var ps=nodes.filter(function(n){ return n.kind==="p"; }).sort(function(a,b){ return a.label.localeCompare(b.label,"es"); });
+  var cA=el("select",{"aria-label":"Primera persona"}), cB=el("select",{"aria-label":"Segunda persona"}), cOut=el("div");
+  [cA,cB].forEach(function(s,i){ s.appendChild(el("option",{value:"",text:i?"— SEGUNDA PERSONA —":"— PRIMERA PERSONA —"}));
+    ps.forEach(function(n){ s.appendChild(el("option",{value:n.id,text:n.label})); }); s.onchange=comparar; tc.appendChild(s); });
+  if(sel&&sel.kind==="p") cA.value=sel.id;
+  function comparar(){
+    clr(cOut); var A=nodeBy.get(cA.value), B=nodeBy.get(cB.value);
+    if(!A||!B||A===B) return;
+    function orgsDe(n){ var s=new Set(); n.links.forEach(function(L){ var o=L.a===n?L.b:L.a; if(activeLink(L.v)&&o.kind==="o") s.add(o); }); return s; }
+    var oa=orgsDe(A), ob=orgsDe(B), com=[...oa].filter(function(o){ return ob.has(o); });
+    cOut.appendChild(el("p",{class:"d",style:"margin-top:6px",text:com.length?com.length+(com.length===1?" organización en común.":" organizaciones en común."):"Ninguna organización en común con los filtros activos."}));
+    com.forEach(function(o){ var t=tiempoTxt(A,B,o);
+      cOut.appendChild(el("button",{class:"tarea",type:"button",onclick:function(){ select(o); centerOn(o); }},[el("b",{text:o.label}),el("span",{text:t.x})]));
+      var g=el("div",{class:"cmp"});
+      [A,B].forEach(function(n){ var d=el("div",{},[el("i",{text:n.label})]);
+        entre(n,o).forEach(function(v){ d.appendChild(el("div",{style:"border:0;padding:0",text:(v.etiqueta||v.tipo)+" · "+spanTxt(v)+" · "+TA.respaldo(v).lb.toLowerCase()})); }); g.appendChild(d); });
+      cOut.appendChild(g); });
+    var g2=el("div",{class:"cmp"});
+    [[A,oa,ob],[B,ob,oa]].forEach(function(x){ var solo=[...x[1]].filter(function(o){ return !x[2].has(o); });
+      g2.appendChild(el("div",{},[el("i",{text:"SOLO "+x[0].label}),document.createTextNode(solo.map(function(o){ return o.label; }).join(" · ")||"—")])); });
+    cOut.appendChild(g2);
+  }
+  tc.appendChild(cOut); body.appendChild(tc);
 
   /* ── coincidencias ── */
   var t2=el("div",{class:"antool"});
   t2.appendChild(el("h5",{text:"COINCIDENCIAS"}));
-  t2.appendChild(el("p",{class:"d",text:"Pares de personas que comparten una misma organización. Es lo que un listado de nombres no muestra."}));
+  t2.appendChild(el("p",{class:"d",text:"Pares de personas que comparten una organización, y si fue al mismo tiempo. «A la vez» se dice solo cuando las fechas de ambos lo obligan."}));
   var co=coincidencias();
+  co.forEach(function(p){ p.vez=p.orgs.filter(function(o){ var t=tiempoTxt(p.a,p.b,o); return t&&t.k==="si"; }).length; });
+  co.sort(function(a,b){ return b.vez-a.vez || b.orgs.length-a.orgs.length; });
   if(!co.length) t2.appendChild(el("p",{class:"d",text:"Ninguna organización reúne hoy a dos personas del registro."}));
   co.slice(0,40).forEach(function(p){
     var row=el("div",{class:"pair"});
@@ -1467,11 +1707,22 @@ function buildAnalisis(body){
     row.appendChild(b);
     var s=el("span");
     s.appendChild(el("em",{text:p.orgs.length+(p.orgs.length===1?" nodo compartido: ":" nodos compartidos: ")}));
-    s.appendChild(document.createTextNode(p.orgs.map(function(o){ return o.label; }).join(" · ")));
+    s.appendChild(document.createTextNode(p.orgs.map(function(o){ var t=tiempoTxt(p.a,p.b,o); return o.label+(t?" ("+t.x+")":""); }).join(" · ")));
     row.appendChild(s);
     t2.appendChild(row);
   });
   body.appendChild(t2);
+
+  /* ── puentes ── */
+  var tp=el("div",{class:"antool"});
+  tp.appendChild(el("h5",{text:"PUENTES"}));
+  tp.appendChild(el("p",{class:"d",text:"Nodos por los que pasan más caminos cortos entre los demás. Señalan dónde mirar; describen este registro, no la influencia real."}));
+  var pu=TA.puentes(aristasActivas()), pm=pu.length?pu[0].c:1;
+  if(!pu.length) tp.appendChild(el("p",{class:"d",text:"Sin puentes con los filtros activos."}));
+  pu.slice(0,10).forEach(function(x){ var n=nodeBy.get(x.n); if(!n) return;
+    tp.appendChild(el("button",{class:"rank"+(n.kind==="o"?" org":""),type:"button",onclick:function(){ select(n); centerOn(n); }},[
+      el("span",{class:"nm2",text:n.label}), el("span",{class:"bar"},[el("i",{style:"width:"+Math.round(x.c/pm*100)+"%"})]), el("b",{text:String(Math.round(x.c))})])); });
+  body.appendChild(tp);
 
   /* ── concentración ── */
   var t3=el("div",{class:"antool"});
@@ -1573,6 +1824,14 @@ function buildCapas(body){
     row.appendChild(el("span",{class:"ct",text:String(n)}));
     body.appendChild(row);
   });
+  body.appendChild(el("div",{class:"grp"},[el("span",{text:"RESPALDO"}),el("span",{text:String(vincs.filter(TA.conRespaldo).length)})]));
+  var rowR=el("button",{class:"row"+(soloRespaldo?" on":""),type:"button",onclick:function(){
+    soloRespaldo=!soloRespaldo; rowR.className="row"+(soloRespaldo?" on":"");
+    selHud(); renderLegend(); renderDossier(); drawTl(); draw(); renderMetrics(); }});
+  rowR.appendChild(el("span",{class:"sw"},[el("i")]));
+  rowR.appendChild(el("span",{class:"nm",text:"SOLO LO MEJOR RESPALDADO"}));
+  body.appendChild(rowR);
+  body.appendChild(el("div",{class:"hint",text:"Deja solo lo que viene de un registro oficial o judicial, o de dos medios distintos. Wikipedia no cuenta. Dos medios pueden repetir el mismo cable: respaldado no es lo mismo que confirmado."}));
   var sinF=vincs.filter(function(v){ return !srcs(v).length; }).length;
   body.appendChild(el("div",{class:"fld"},[
     el("button",{class:"mini",style:"width:100%",type:"button",text:"SOLO REGISTRO OFICIAL",onclick:function(){
@@ -1582,7 +1841,7 @@ function buildCapas(body){
       toast("Solo vínculos de registro. "+(sinF?sinF+" sin fuente siguen marcados.":"")); }}),
     el("button",{class:"mini",style:"width:100%;margin-top:5px",type:"button",text:"RESTABLECER FILTROS",onclick:function(){
       DIMS.forEach(function(d){ dimOn[d.id]=true; }); PROVS.forEach(function(p){ provOn[p.id]=true; });
-      wA=yMin; wB=yMax;
+      soloRespaldo=false; wA=yMin; wB=yMax;
       openPanel("capas","DIMENSIONES",buildCapas);
       renderLegend(); renderDossier(); drawTl(); draw(); renderMetrics(); }})
   ]));
@@ -1850,7 +2109,7 @@ function buildDoctrina(body){
   body.appendChild(d);
 }
 function syncRail(){
-  [["rBuscar","entidades"],["rCapas","capas"],["rDoc","ontologia"],["rTeo","teorias"],["rCola","cola"],["rAnal","analisis"],["rAcc","acciones"],["rCrono","crono"],["rApp","app"]].forEach(function(p){
+  [["rBuscar","entidades"],["rCapas","capas"],["rDoc","ontologia"],["rTeo","teorias"],["rCola","cola"],["rAnal","analisis"],["rAcc","acciones"],["rCrono","crono"],["rApp","app"],["rPend","pend"],["rExp","exp"],["rZoom","zoom"]].forEach(function(p){
     var b=$(p[0]); if(b) b.classList.toggle("on", panelMode===p[1]);
   });
 }
@@ -1933,6 +2192,8 @@ function buildRails(){
     function(){ togglePanel("crono","CRONOLOGÍA",buildCronologia); }));
   L.appendChild(railBtn("rAnal","ANÁLISIS",["M4 19V5M4 19h16","M8 16V9M12 16v-4M16 16V6"],
     function(){ togglePanel("analisis","ANÁLISIS",buildAnalisis); }));
+  L.appendChild(railBtn("rPend","VERIFICACIÓN: QUÉ FALTA COMPROBAR",["M9 4h6v3H9z","M7 5H5v15h14V5h-2","M8.5 13.5l2.5 2.5 4.5-5"],
+    function(){ togglePanel("pend","VERIFICACIÓN",buildPendientes); }));
   var bq=railBtn("rCola","SOLICITUDES DE INVESTIGACIÓN",["M12 8v5l3 2","M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"],
     function(){ togglePanel("cola","SOLICITUDES",buildCola); });
   var pend=solics.filter(function(s){ return s.estado!=="lista"; }).length;
@@ -1966,7 +2227,9 @@ function buildRails(){
     if(promptInstalar) ba.appendChild(el("span",{class:"badge",style:"background:var(--cy);color:#04070c",text:"+"}));
     R.appendChild(ba);
   }
-  R.appendChild(railBtn("rExp","EXPORTAR DOSIER",["M12 3v12","M8 11l4 4 4-4","M4 20h16"],function(){ exportar(); }));
+  R.appendChild(railBtn("rZoom","ZOOM Y TAMAÑO",["M10.5 4a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13z","M20 20l-4.8-4.8","M10.5 8v5M8 10.5h5"],
+    function(){ togglePanel("zoom","ZOOM Y TAMAÑO",buildZoom); }));
+  R.appendChild(railBtn("rExp","EXPORTAR",["M12 3v12","M8 11l4 4 4-4","M4 20h16"],function(){ togglePanel("exp","EXPORTAR",buildExportar); }));
   var bf=railBtn("rFit","REENCUADRAR (R)",["M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"],function(){ fit(); });
   R.appendChild(bf);
 }
@@ -2124,6 +2387,7 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
     close(); qin.blur();
     if(it.kind==="inv"){ qin.value=""; formInvestigar(it.q); return; }
     if(it.kind==="node"){ qin.value=""; select(it.n); centerOn(it.n); }
+    if(it.kind==="claim"){ qin.value=""; var np=nodeBy.get("persona:"+it.v.personaId); if(np){ select(np); centerOn(np); } }
   }
   function paint(){
     clr(qres);
@@ -2138,6 +2402,7 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
       .sort(function(a,b){ return a.sc-b.sc || (a.n.kind==="p"?0:1)-(b.n.kind==="p"?0:1) || b.n.deg-a.n.deg; })
       .slice(0,8);
     items=hits.map(function(h){ return {kind:"node",n:h.n}; });
+    if(q.length>=3){ var rg=regActual(); TA.buscar(rg,q,6).forEach(function(k){ items.push({kind:"claim",v:rg.vinculos[k]}); }); }
     var exacta=hits.some(function(h){ return h.n.kind==="p" && h.sc===0; });
     if(canEdit && !estatico && db && q.length>=3 && !exacta) items.push({kind:"inv",q:q});
     if(!items.length){
@@ -2158,6 +2423,12 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
           el("span",{class:"k",text:k}),
           el("span",{class:"t",text:n.label}),
           el("span",{class:"s",text:(n.kind==="p"?(rec.rolPublico||""):(rec.tipo||"")).slice(0,34)})
+        ]);
+      } else if(it.kind==="claim"){
+        b=el("button",{type:"button",class:i===idx?"on":""},[
+          el("span",{class:"k",text:"VÍNCULO"}),
+          el("span",{class:"t",text:(it.v.etiqueta||it.v.tipo)+" · "+nameOf(it.v.contraparte)}),
+          el("span",{class:"s",text:nameOf("persona:"+it.v.personaId)})
         ]);
       } else {
         b=el("button",{type:"button",class:"inv"+(i===idx?" on":"")},[
@@ -2274,6 +2545,7 @@ function mdDossier(){
   var filtros=[];
   DIMS.forEach(function(d){ if(!dimOn[d.id]) filtros.push("dimensión «"+d.lb.toLowerCase()+"» apagada"); });
   PROVS.forEach(function(p){ if(!provOn[p.id]) filtros.push("procedencia «"+p.lb.toLowerCase()+"» apagada"); });
+  if(soloRespaldo) filtros.push("solo lo mejor respaldado");
   if(yMin!=null && (wA!==yMin||wB!==yMax)) filtros.push("ventana temporal "+wA+"–"+wB);
   var quienes = sel ? [sel] : nodes.filter(function(n){ return n.kind==="p"; });
   L.push("# Telar — "+(sel? sel.label : "registro completo"));
@@ -2529,6 +2801,8 @@ function refresh(){
   if(panelMode==="entidades") openPanel("entidades","ENTIDADES",buildEntidades);
   if(panelMode==="capas") openPanel("capas","DIMENSIONES",buildCapas);
   if(panelMode==="cola") openPanel("cola","SOLICITUDES",buildCola);
+  if(panelMode==="pend") openPanel("pend","VERIFICACIÓN",buildPendientes);
+  if(panelMode==="exp") openPanel("exp","EXPORTAR",buildExportar);
   if(panelMode==="analisis") openPanel("analisis","ANÁLISIS",buildAnalisis);
   if(panelMode==="ontologia") openPanel("ontologia","ONTOLOGÍA",buildOntologia);
   if(panelMode==="acciones") openPanel("acciones","REGISTRO DE ACCIONES",buildAcciones);
@@ -2573,7 +2847,7 @@ fetch("data/world.json").then(function(r){ return r.ok?r.json():null; }).then(fu
 }).catch(function(){});
 
 if(window.ResizeObserver) new ResizeObserver(function(){ drawTl(); }).observe($("tlTrack"));
-resize(); buildRails(); renderLegend(); renderTicker(); renderMetrics(); drawTl(); renderVoid();
+ponerUi(ui,false); buildRails(); renderLegend(); renderTicker(); renderMetrics(); drawTl(); renderVoid();
 
 var C=(typeof window!=="undefined"&&window.telarLocal&&typeof window.telarLocal.use==="function")?window.telarLocal:null;
 if(!C){

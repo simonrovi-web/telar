@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 DOCS = Path(__file__).parents[1] / "docs"
-TEXTOS = ["index.html", "telar-open.js", "sw.js", "manifest.webmanifest"]
+TEXTOS = ["index.html", "analisis.js", "telar-open.js", "sw.js", "manifest.webmanifest"]
 
 
 def test_sin_ia_cerrada_ni_rutinas_remotas():
@@ -44,6 +44,6 @@ def test_instalable_y_disponible_sin_red():
         assert "x".join(str(int.from_bytes(b[k:k + 4], "big")) for k in (16, 20)) == i["sizes"], i["src"]
     sw = (DOCS / "sw.js").read_text(encoding="utf-8")
     base = re.findall(r'"([^"]+)"', sw[sw.index("BASE = ["):sw.index("];")])
-    assert {"./", "index.html", "telar-open.js", "data/registro.json", "data/world.json"} <= set(base)
+    assert {"./", "index.html", "analisis.js", "telar-open.js", "data/registro.json", "data/world.json"} <= set(base)
     for f in base:  # un archivo que falte abortaría la instalación entera
         assert f == "./" or (DOCS / f).is_file(), f
