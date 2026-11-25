@@ -1859,37 +1859,50 @@ function syncRail(){
 var promptInstalar = null;
 var URL_APP = "https://simonrovi-web.github.io/telar/";
 function enApp(){ return matchMedia("(display-mode: standalone)").matches || navigator.standalone===true; }
-{
-  addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); promptInstalar=e;
-    if(panelMode==="app") openPanel("app","INSTALAR EN EL TELÉFONO",buildApp); });
-  addEventListener("appinstalled",function(){ promptInstalar=null;
-    if(panelMode==="app") openPanel("app","INSTALAR EN EL TELÉFONO",buildApp); });
-  if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
-    addEventListener("load",function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
-  }
+/* Equipo y navegador, solo para mostrar primero las instrucciones que sirven. */
+function equipo(){
+  var u=navigator.userAgent, tactil=navigator.maxTouchPoints>1;
+  var so = /iPhone|iPod/.test(u) ? "iphone" : (/iPad/.test(u) || (/Macintosh/.test(u)&&tactil)) ? "ipad"
+    : /Android/.test(u) ? "android" : /Macintosh/.test(u) ? "mac" : "pc";
+  return {so:so, incrustado:/FBAN|FBAV|Instagram|Line\/|WhatsApp|Twitter|LinkedInApp|; wv\)/.test(u),
+    firefox:/Firefox|FxiOS/.test(u)};
+}
+function refrescarApp(){
+  buildRails(); syncRail();
+  if(panelMode==="app") openPanel("app","INSTALAR TELAR",buildApp);
+}
+addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); promptInstalar=e; refrescarApp(); });
+addEventListener("appinstalled",function(){ promptInstalar=null; toast("Telar quedó instalado."); refrescarApp(); });
+if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
+  addEventListener("load",function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
 }
 function buildApp(body){
-  var d=el("div",{class:"doc"});
+  var d=el("div",{class:"doc"}), q=equipo();
   if(enApp()){
     d.appendChild(el("p",{text:"Ya estás usando Telar instalado. Se actualiza solo cada vez que lo abres con conexión; sin señal muestra la última copia que guardó."}));
     body.appendChild(d); return;
   }
-  var aqui = location.protocol==="https:" && location.hostname.indexOf("github.io")>=0;
+  if(q.incrustado) d.appendChild(el("p",{style:"margin:2px 0 8px;color:var(--am)",
+    text:"Estás dentro del navegador de otra aplicación, que no deja instalar. Abre "+URL_APP+" en "+(q.so==="iphone"||q.so==="ipad"?"Safari":"Chrome")+"."}));
   if(promptInstalar){
-    var b=el("button",{class:"mini go",type:"button",text:"INSTALAR TELAR",style:"margin:4px 0 2px",
-      onclick:function(){ var p=promptInstalar; if(!p) return; p.prompt();
-        Promise.resolve(p.userChoice).catch(function(){}).then(function(){ promptInstalar=null;
-          openPanel("app","INSTALAR EN EL TELÉFONO",buildApp); }); }});
-    d.appendChild(b);
+    d.appendChild(el("button",{class:"mini go",type:"button",text:"INSTALAR TELAR",style:"margin:4px 0 8px;width:100%",
+      onclick:function(){ var p=promptInstalar; if(!p) return; promptInstalar=null; p.prompt();
+        Promise.resolve(p.userChoice).catch(function(){}).then(refrescarApp); }}));
   }
-  d.appendChild(el("h5",{text:"ANDROID · CHROME"}));
-  d.appendChild(el("p",{style:"margin:2px 0 6px",text: aqui
-    ? (promptInstalar ? "Pulsa el botón de arriba." : "Abre el menú ⋮ de Chrome y elige «Instalar app» o «Agregar a la pantalla principal».")
-    : "Abre "+URL_APP+" en Chrome, luego el menú ⋮ y «Instalar app»."}));
-  d.appendChild(el("h5",{text:"IPHONE · SAFARI"}));
-  d.appendChild(el("p",{style:"margin:2px 0 6px",text: (aqui ? "" : "Abre "+URL_APP+" en Safari. ")
-    + "Pulsa el botón Compartir (el cuadrado con la flecha hacia arriba), baja y elige «Agregar a inicio». Safari no ofrece un botón automático: ese paso es manual."}));
-  d.appendChild(el("p",{style:"margin:10px 0 0",text:"Instalado, Telar abre a pantalla completa, sin barra del navegador, y guarda una copia para trabajar sin conexión. "}));
+  var PASOS=[
+    {id:["pc"],t:"WINDOWS, LINUX Y CHROMEBOOK",x:"En Chrome o Edge, pulsa el ícono de instalar al final de la barra de direcciones, o abre el menú y elige «Instalar Telar». En Edge está en Aplicaciones."},
+    {id:["mac"],t:"MAC",x:"En Chrome o Edge, pulsa el ícono de instalar de la barra de direcciones. En Safari, abre Archivo y elige «Agregar al Dock»."},
+    {id:["android"],t:"ANDROID",x:"En Chrome, abre el menú ⋮ y elige «Instalar app» o «Agregar a la pantalla principal». En Samsung Internet está en el menú, «Agregar página a»."},
+    {id:["iphone","ipad"],t:"IPHONE Y IPAD",x:"En Safari, pulsa Compartir (el cuadrado con la flecha hacia arriba), baja y elige «Agregar a inicio». Apple no permite un botón automático: ese paso es manual."}
+  ];
+  PASOS.sort(function(a,b){ return (b.id.indexOf(q.so)>=0)-(a.id.indexOf(q.so)>=0); });
+  PASOS.forEach(function(p){
+    var mio=p.id.indexOf(q.so)>=0;
+    d.appendChild(el("h5",{text:p.t+(mio?" · ESTE EQUIPO":"")}));
+    d.appendChild(el("p",{style:"margin:2px 0 6px",text:(mio&&promptInstalar?"Pulsa el botón de arriba, o bien: ":"")+p.x}));
+  });
+  if(q.firefox) d.appendChild(el("p",{style:"margin:6px 0 0",text:"Firefox no instala aplicaciones web en todos los equipos. Si no ves la opción, usa Chrome, Edge o Safari."}));
+  d.appendChild(el("p",{style:"margin:10px 0 0",text:"Instalado, Telar abre en su propia ventana y guarda una copia del registro para consultarla sin conexión."}));
   body.appendChild(d);
 }
 
@@ -1947,8 +1960,12 @@ function buildRails(){
   R.appendChild(window.TELAR_OPEN
     ? railBtn("rTaller","VOLVER A LA LECTURA",["M15 6l-6 6 6 6"],function(){ location.href="./"; })
     : railBtn("rTaller","TALLER: EDITAR EN ESTE NAVEGADOR",["M4 20l4-1L19 8l-3-3L5 16l-1 4z"],function(){ location.href="?taller"; }));
-  if(!enApp()) R.appendChild(railBtn("rApp","INSTALAR EN EL TELÉFONO",["M7 3h10v18H7z","M11 18h2"],
-    function(){ togglePanel("app","INSTALAR EN EL TELÉFONO",buildApp); }));
+  if(!enApp()){
+    var ba=railBtn("rApp","INSTALAR TELAR",["M4 5h16v11H4z","M8 20h8","M12 8v5","M9.5 11l2.5 2.5 2.5-2.5"],
+      function(){ togglePanel("app","INSTALAR TELAR",buildApp); });
+    if(promptInstalar) ba.appendChild(el("span",{class:"badge",style:"background:var(--cy);color:#04070c",text:"+"}));
+    R.appendChild(ba);
+  }
   R.appendChild(railBtn("rExp","EXPORTAR DOSIER",["M12 3v12","M8 11l4 4 4-4","M4 20h16"],function(){ exportar(); }));
   var bf=railBtn("rFit","REENCUADRAR (R)",["M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"],function(){ fit(); });
   R.appendChild(bf);

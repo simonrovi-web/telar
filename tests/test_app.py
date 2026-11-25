@@ -31,3 +31,19 @@ def test_registro_con_fuente_y_sin_huerfanos():
         clase, ident = v["contraparte"].split(":", 1)
         assert ident in r["organizaciones" if clase == "org" else "personas"], k
         assert v["fuentes"] and all(s[1].startswith(("http://", "https://")) for s in v["fuentes"]), k
+
+
+def test_instalable_y_disponible_sin_red():
+    m = json.loads((DOCS / "manifest.webmanifest").read_text(encoding="utf-8"))
+    assert m["display"] == "standalone" and m["start_url"] == m["scope"] == "./"
+    imagenes = m["icons"] + m["screenshots"]
+    assert {"192x192", "512x512"} <= {i["sizes"] for i in m["icons"]}
+    assert any(i["purpose"] == "maskable" for i in m["icons"])
+    for i in imagenes:
+        b = (DOCS / i["src"]).read_bytes()
+        assert "x".join(str(int.from_bytes(b[k:k + 4], "big")) for k in (16, 20)) == i["sizes"], i["src"]
+    sw = (DOCS / "sw.js").read_text(encoding="utf-8")
+    base = re.findall(r'"([^"]+)"', sw[sw.index("BASE = ["):sw.index("];")])
+    assert {"./", "index.html", "telar-open.js", "data/registro.json", "data/world.json"} <= set(base)
+    for f in base:  # un archivo que falte abortaría la instalación entera
+        assert f == "./" or (DOCS / f).is_file(), f

@@ -1,15 +1,17 @@
 /* Telar · service worker
    Red primero para todo lo propio (siempre la versión más nueva si hay señal);
    si no hay conexión, sirve la última copia guardada. Lo externo no se toca.
-   El registro (data/registro.json) no se precarga: puede no existir en una
-   publicación estática, y un 404 aquí abortaría la instalación entera. */
-const CACHE = "telar-app-v1";
+   Una sola visita con conexión deja guardados la app, el registro y el taller. */
+const CACHE = "telar-app-v2";
 const BASE = [
-  "./", "index.html", "manifest.webmanifest", "data/world.json",
-  "icons/icon-192.png", "icons/icon-512.png"
+  "./", "index.html", "telar-open.js", "manifest.webmanifest",
+  "data/registro.json", "data/world.json",
+  "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"
 ];
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(BASE)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE)
+    .then(c => c.addAll(BASE.map(u => new Request(u, {cache: "reload"}))))
+    .then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys()
