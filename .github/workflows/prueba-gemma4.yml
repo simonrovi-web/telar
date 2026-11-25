@@ -1,0 +1,71 @@
+name: Prueba Gemma 4
+
+# Mide Gemma 4 como extractor sobre páginas ya citadas. Solo lee: no escribe en
+# el repositorio ni publica fichas. Corre al empujar a la rama de prueba, porque
+# el disparo manual exige que el archivo ya esté en main.
+on:
+  workflow_dispatch:
+  push:
+    branches: [prueba-gemma4]
+    paths:
+      - "evaluacion/**"
+      - ".github/workflows/prueba-gemma4.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prueba-gemma4
+  cancel-in-progress: true
+
+env:
+  OLLAMA_MODELS: ${{ github.workspace }}/.ollama-modelos
+  TELAR_EXTRACTOR: gemma4:e4b
+  TELAR_CONTROL: qwen3:4b
+
+jobs:
+  medir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]" requests trafilatura
+
+      - name: Filtros sin modelo
+        run: python -m pytest -q tests/test_filtros.py
+
+      - name: Caché de modelos
+        uses: actions/cache@v4
+        with:
+          path: .ollama-modelos
+          key: prueba-${{ env.TELAR_EXTRACTOR }}-${{ env.TELAR_CONTROL }}-v1
+
+      - name: Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          sudo systemctl stop ollama 2>/dev/null || true
+          mkdir -p "$OLLAMA_MODELS"
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/tags >/dev/null && break; sleep 2; done
+          ollama --version
+          ollama pull "$TELAR_EXTRACTOR"
+          ollama pull "$TELAR_CONTROL"
+          ollama list
+
+      - name: Medir
+        run: python -m evaluacion.evaluar --salida informe.json
+
+      - name: Guardar el informe
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-gemma4
+          path: informe.json
+          retention-days: 14
+
+      - name: Registro de Ollama
+        if: failure()
+        run: tail -n 60 /tmp/ollama.log || true
