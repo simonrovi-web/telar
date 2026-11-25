@@ -1,0 +1,19 @@
+name: Sondeo de nóminas
+on:
+  push:
+    branches: [prueba-nominas]
+permissions:
+  contents: read
+jobs:
+  sondeo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - run: |
+          UA="Mozilla/5.0 (compatible; investigacion/1.0)"
+          for u in "https://web-back.senado.cl/api/parliamentarians?limit=1000" \
+            "https://opendata.camara.cl/camaradiputados/WServices/WSDiputado.asmx/retornarDiputadosPeriodoActual" \
+            "https://datos.cplt.cl/catalogos/infoprobidad/csvdeclaraciones" \
+            "https://tramitacion.senado.cl/wspublico/senadores_vigentes.php"; do
+            curl -sL -m 180 -A "$UA" -o /dev/null -w "%{http_code} %{size_download} %{time_total}s $u\n" "$u" || true
+          done
