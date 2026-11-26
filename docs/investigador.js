@@ -1,23 +1,32 @@
 /* Telar · investigaciones dentro de la app.
 
    Pide una investigación, sigue su avance y lee el borrador sin salir de Telar.
-   El investigador vive en un repositorio privado de GitHub: para hablar con él, quien
-   administra pega una vez una llave de acceso (token) que queda solo en este navegador.
-   Sin esa llave, la app sigue siendo de lectura y nada cambia para quien visita.
+   El investigador vive en un repositorio privado de GitHub. Quien administra entra con
+   el botón «Entrar con GitHub»: GitHub pide autorizar la app «Telar» y vuelve aquí. El
+   servidor de acceso (acceso/worker.js) canjea ese permiso, porque solo él guarda el
+   secreto de la app. El permiso queda solo en este navegador. Sin entrar, la app sigue
+   siendo de lectura y nada cambia para quien visita.
 
    La app le pasa sus funciones con TelarInvestigador.iniciar({...}) al arrancar. */
 (function () {
   "use strict";
 
+  /* Acceso con GitHub: dirección del servidor de acceso y Client ID de la app «Telar».
+     Mientras estén vacíos, el panel ofrece la llave pegada a mano. */
+  var ACCESO = { servidor: "", clientId: "" };
+
   var el, clr, $, toast, openPanel, togglePanel, openSheet, lab, inp, V, railBtn, modoPanel;
   function iniciar(h) {
     el = h.el; clr = h.clr; $ = h.$; toast = h.toast; openPanel = h.openPanel; togglePanel = h.togglePanel;
     openSheet = h.openSheet; lab = h.lab; inp = h.inp; V = h.V; railBtn = h.railBtn; modoPanel = h.modoPanel;
+    if (llegada) setTimeout(procesarLlegada, 1200);
   }
 
   var REPO = "simonrovi-web/telar-investigador";
   var API = "https://api.github.com";
-  var CLAVE = "telar.investigador.token";
+  var CLAVE = "telar.investigador.sesion";      // {token, refresh, vence}
+  var CLAVE_VIEJA = "telar.investigador.token"; // llave pegada a mano
+  var ESTADO = "telar.investigador.estado";
   var MARCA = "### Nombre y apellido";
   var CREAR_TOKEN = "https://github.com/settings/personal-access-tokens/new" +
     "?name=Telar%20app&description=Pedir%20investigaciones%20desde%20Telar" +
@@ -28,25 +37,92 @@
   var reloj = null;
   var usuario = null;
 
-  /* ── la llave, solo en este navegador ─────────────────────────────── */
-  function token() { try { return localStorage.getItem(CLAVE) || ""; } catch (e) { return ""; } }
-  function guardarToken(t) { try { localStorage.setItem(CLAVE, t); return true; } catch (e) { return false; } }
-  function borrarToken() { try { localStorage.removeItem(CLAVE); } catch (e) {} usuario = null; lista = null; cache = {}; }
+  /* ── la sesión, solo en este navegador ────────────────────────────── */
+  function conAcceso() { return !!(ACCESO.servidor && ACCESO.clientId); }
+  function sesion() {
+    try {
+      var s = JSON.parse(localStorage.getItem(CLAVE) || "null");
+      if (s && s.token) return s;
+      var v = localStorage.getItem(CLAVE_VIEJA);
+      return v ? { token: v } : {};
+    } catch (e) { return {}; }
+  }
+  function token() { return sesion().token || ""; }
+  function guardarSesion(s) {
+    try { localStorage.setItem(CLAVE, JSON.stringify({ token: s.token, refresh: s.refresh || "", vence: s.vence || 0 })); return true; }
+    catch (e) { return false; }
+  }
+  function borrarToken() {
+    try { localStorage.removeItem(CLAVE); localStorage.removeItem(CLAVE_VIEJA); } catch (e) {}
+    usuario = null; lista = null; cache = {};
+  }
 
-  function gh(ruta, opciones) {
+  /* Los permisos de GitHub vencen a las 8 horas; se renuevan solos con el servidor de acceso. */
+  function renovar() {
+    var s = sesion();
+    if (!s.refresh || !conAcceso()) return Promise.reject(new Error("La sesión venció. Entra de nuevo con GitHub."));
+    return fetch(ACCESO.servidor.replace(/\/$/, "") + "/renovar", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ refresh: s.refresh }) })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          if (!r.ok || !j.token) { borrarToken(); renderRail(); throw new Error(j.error || "La sesión venció. Entra de nuevo con GitHub."); }
+          guardarSesion(j);
+        });
+      }, function () { throw new Error("Sin conexión con el servidor de acceso."); });
+  }
+
+  function gh(ruta, opciones, reintento) {
     opciones = opciones || {};
+    var s = sesion();
+    if (!opciones.token && !reintento && s.refresh && s.vence && Date.now() > s.vence - 60000)
+      return renovar().then(function () { return gh(ruta, opciones, true); });
     var h = { "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28",
               "Authorization": "Bearer " + (opciones.token || token()) };
     if (opciones.cuerpo) h["Content-Type"] = "application/json";
     return fetch(API + ruta, { method: opciones.metodo || "GET", headers: h, cache: "no-store",
                                body: opciones.cuerpo ? JSON.stringify(opciones.cuerpo) : undefined })
       .then(function (r) {
-        if (r.status === 401) throw new Error("La llave no sirve o venció. Desconecta y pega una nueva.");
+        if (r.status === 401 && !opciones.token && !reintento && sesion().refresh)
+          return renovar().then(function () { return gh(ruta, opciones, true); });
+        if (r.status === 401) throw new Error("Tu sesión venció. Pulsa «Salir» y vuelve a entrar.");
         if (r.status === 403 || r.status === 404)
-          throw new Error("La llave no tiene permiso sobre el investigador. Revisa que incluya el repositorio telar-investigador con Issues de lectura y escritura.");
+          throw new Error("Tu cuenta no tiene permiso sobre el investigador. Revisa que la app «Telar» esté instalada en telar-investigador.");
         if (!r.ok) throw new Error("GitHub respondió " + r.status + ". Prueba de nuevo en un momento.");
         return opciones.texto ? r.text() : r.json();
       }, function () { throw new Error("Sin conexión con GitHub."); });
+  }
+
+  /* ── entrar con GitHub ─────────────────────────────────────────────── */
+  function entrar() {
+    var a = new Uint8Array(16); crypto.getRandomValues(a);
+    var st = Array.prototype.map.call(a, function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+    try { sessionStorage.setItem(ESTADO, st); } catch (e) {}
+    location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(ACCESO.clientId) +
+      "&state=" + st;
+  }
+  /* GitHub → servidor de acceso → aquí, con el permiso en el fragmento. Se lee y se borra
+     de la dirección antes de que la app arranque. */
+  var llegada = null;
+  (function () {
+    var m = /[#&]ti=([^&]+)/.exec(location.hash || "");
+    if (!m) return;
+    try {
+      var bin = atob(decodeURIComponent(m[1]));
+      llegada = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, function (c) { return c.charCodeAt(0); })));
+    } catch (e) { llegada = { error: "La vuelta desde GitHub llegó dañada. Vuelve a intentarlo." }; }
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  })();
+  function procesarLlegada() {
+    var d = llegada, esperado = "";
+    llegada = null;
+    try { esperado = sessionStorage.getItem(ESTADO) || ""; sessionStorage.removeItem(ESTADO); } catch (e) {}
+    if (d.error) { toast(d.error, 1); abrir(); return; }
+    if (!esperado || d.state !== esperado || !d.token) {
+      toast("Esa entrada no la iniciaste desde aquí. Vuelve a pulsar «Entrar con GitHub».", 1); abrir(); return;
+    }
+    if (!guardarSesion(d)) { toast("Este navegador no deja guardar la sesión (modo privado).", 1); return; }
+    toast("Entraste con GitHub. Ya puedes pedir investigaciones.");
+    renderRail(); abrir();
   }
 
   /* ── lectura de los pedidos ────────────────────────────────────────── */
@@ -115,10 +191,12 @@
     if (lista) pintar(caja, lista);
     else caja.appendChild(el("div", { class: "hint", text: "Leyendo tus investigaciones…" }));
     actualizar(caja);
+    var quien;
     body.appendChild(el("div", { class: "hint ti-pie" }, [
-      document.createTextNode("Conectado" + (usuario ? " como " + usuario : "") + ". "),
-      el("button", { type: "button", class: "ti-link", text: "Desconectar este navegador",
-                     onclick: function () { borrarToken(); renderRail(); abrir(); toast("Llave borrada de este navegador."); } })]));
+      quien = document.createTextNode("Entraste" + (usuario ? " como " + usuario : "") + ". "),
+      el("button", { type: "button", class: "ti-link", text: "Salir",
+                     onclick: function () { borrarToken(); renderRail(); abrir(); toast("Saliste. La sesión se borró de este navegador."); } })]));
+    if (!usuario) gh("/user").then(function (u) { usuario = u.login; quien.textContent = "Entraste como " + usuario + ". "; }, function () {});
   }
   function actualizar(caja) {
     leerPedidos().then(function (ps) {
@@ -203,7 +281,7 @@
   function nombreCompleto(n) { return n.trim().split(/\s+/).length >= 2 && n.trim().length >= 5; }
 
   function pedir(pref, pistaPref) {
-    if (!token()) { abrir(); toast("Primero conecta la app con el investigador.", 1); return; }
+    if (!token()) { abrir(); toast("Primero entra con GitHub.", 1); return; }
     openSheet("INVESTIGAR UN NOMBRE", function (f) {
       f.appendChild(el("div", { class: "tip", style: "margin:8px 0 2px;line-height:1.6",
         text: "El investigador busca en Wikidata, Wikipedia y prensa, y arma un borrador con la cita y el enlace de cada dato. Solo figuras públicas: no investiga a particulares, menores ni familiares." }));
@@ -258,11 +336,25 @@
     }).catch(function () { clr(caja); caja.appendChild(el("div", { class: "tip ti-error", text: "No se pudo consultar Wikidata." })); });
   }
 
-  /* ── conectar, una sola vez ────────────────────────────────────────── */
+  /* ── entrar ────────────────────────────────────────────────────────── */
   function pantallaConectar(body) {
     body.appendChild(el("div", { class: "hint" }, [
       el("b", { text: "Pide investigaciones sin salir de Telar. " }),
-      document.createTextNode("Escribes un nombre, el investigador arma un borrador con fuentes y lo lees aquí mismo. Es solo para quien administra Telar: hace falta conectar esta app con tu cuenta de GitHub una vez.")]));
+      document.createTextNode("Escribes un nombre, el investigador arma un borrador con fuentes y lo lees aquí mismo. Es solo para quien administra Telar.")]));
+    if (conAcceso()) {
+      body.appendChild(el("div", { class: "fld", style: "padding:0 11px" }, [
+        el("button", { class: "mini go ti-entrar", type: "button", text: "ENTRAR CON GITHUB", onclick: entrar })]));
+      body.appendChild(el("div", { class: "hint", text:
+        "La primera vez, GitHub te pregunta si autorizas a «Telar»: pulsa Authorize. Después basta con este botón. No hay llaves que copiar." }));
+      var otra = el("div", { hidden: "" });
+      body.appendChild(el("div", { class: "hint" }, [el("button", { type: "button", class: "ti-link", text: "¿GitHub no responde? Usar una llave",
+        onclick: function () { otra.hidden = !otra.hidden; } })]));
+      body.appendChild(otra);
+      return pantallaLlave(otra);
+    }
+    pantallaLlave(body);
+  }
+  function pantallaLlave(body) {
     var pasos = el("ol", { class: "ti-pasos" });
     [["Abre ", el("a", { href: CREAR_TOKEN, target: "_blank", rel: "noopener noreferrer", text: "crear una llave en GitHub" }), "."],
      ["En «Repository access», elige ", el("b", { text: "Only select repositories" }), " y marca ", el("b", { text: "telar-investigador" }), "."],
@@ -280,14 +372,14 @@
       gh("/repos/" + REPO, { token: t }).then(function () {
         return gh("/user", { token: t }).then(function (u) { usuario = u.login; }, function () {});
       }).then(function () {
-        if (!guardarToken(t)) throw new Error("Este navegador no deja guardar la llave (modo privado).");
-        toast("Conectado. Ya puedes pedir investigaciones."); renderRail(); abrir();
+        if (!guardarSesion({ token: t })) throw new Error("Este navegador no deja guardar la llave (modo privado).");
+        toast("Listo. Ya puedes pedir investigaciones."); renderRail(); abrir();
       }).catch(function (e) { b.disabled = false; b.textContent = "CONECTAR"; err.textContent = e.message; });
     } });
     body.appendChild(el("div", { class: "fld ti-token" }, [campoT, b]));
     body.appendChild(err);
     body.appendChild(el("div", { class: "hint" }, [document.createTextNode(
-      "La llave queda guardada solo en este navegador y viaja únicamente a GitHub. Puedes borrarla cuando quieras con «Desconectar», o revocarla en GitHub.")]));
+      "La llave queda guardada solo en este navegador y viaja únicamente a GitHub. Puedes borrarla cuando quieras con «Salir», o revocarla en GitHub.")]));
   }
 
   /* ── botón lateral ─────────────────────────────────────────────────── */
@@ -314,6 +406,7 @@
     ".ti-pie{margin-top:8px;border-top:1px solid var(--line);padding-top:9px}",
     ".ti-link{color:var(--txt-dim);text-decoration:underline;padding:0;font:inherit;letter-spacing:inherit}",
     ".ti-link:hover{color:var(--rd)}",
+    ".ti-entrar{width:100%;padding:11px;font-size:calc(9px * var(--k))}",
     ".ti-pasos{margin:2px 11px 10px 28px;font-size:calc(9px * var(--k));line-height:1.75;color:var(--txt-dim)}",
     ".ti-pasos a{color:var(--cy)}.ti-pasos b{color:var(--txt);font-weight:600}",
     ".ti-token{display:flex;gap:6px;padding:0 11px}.ti-token input{flex:1;min-width:0}",

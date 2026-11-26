@@ -2,7 +2,7 @@
    Red primero para todo lo propio (siempre la versión más nueva si hay señal);
    si no hay conexión, sirve la última copia guardada. Lo externo no se toca.
    Una sola visita con conexión deja guardados la app, el registro y el taller. */
-const CACHE = "telar-app-v9";
+const CACHE = "telar-app-v10";
 const BASE = [
   "./", "index.html", "analisis.js", "investigador.js", "telar-open.js", "manifest.webmanifest",
   "data/registro.json", "data/evidencia.json", "data/identidad.json", "data/historial.json", "data/rectificaciones.json",

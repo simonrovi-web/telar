@@ -25,6 +25,6 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: python -m pyflakes telar_motor tests
       - run: python -m pytest -q
-      - run: node --test tests/analisis.test.js
+      - run: node --test tests/analisis.test.js tests/acceso.test.mjs
       - run: python -m identidad.barrera
       - run: python -m historial.anotar --comprobar
