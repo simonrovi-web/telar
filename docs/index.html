@@ -19,6 +19,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Telar · Registro de influencia pública</title>
 <script src="analisis.js"></script>
+<script src="investigador.js"></script>
 <script>
 /* Lectura por omisión. Con ?taller la app se edita en este navegador. */
 if(new URLSearchParams(location.search).has("taller")) document.write('<script src="telar-open.js"><\/script>');
@@ -561,6 +562,9 @@ button.tarea:hover b{color:var(--cy)}
 <script>
 (function(){
 "use strict";
+
+if(window.TelarInvestigador) TelarInvestigador.iniciar({el:el,clr:clr,$:$,toast:toast,openPanel:openPanel,
+  togglePanel:togglePanel,openSheet:openSheet,lab:lab,inp:inp,V:V,railBtn:railBtn,modoPanel:function(){ return panelMode; }});
 
 /* ═══════════ taxonomía ═══════════ */
 var DIMS=[
@@ -2337,6 +2341,7 @@ function buildRails(){
     function(){ togglePanel("pend","VERIFICACIÓN",buildPendientes); }));
   L.appendChild(railBtn("rHist","HISTORIAL Y CORRECCIONES",["M4 12a8 8 0 1 0 2.6-5.9","M4 4v4h4","M12 8v4l3 2"],
     function(){ togglePanel("hist","HISTORIAL",buildHistorial); }));
+  if(window.TelarInvestigador) L.appendChild(TelarInvestigador.boton());
   var bq=railBtn("rCola","SOLICITUDES DE INVESTIGACIÓN",["M12 8v5l3 2","M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"],
     function(){ togglePanel("cola","SOLICITUDES",buildCola); });
   var pend=solics.filter(function(s){ return s.estado!=="lista"; }).length;
@@ -2525,14 +2530,16 @@ function norm(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").t
 (function(){
   var qin=$("qin"), qres=$("qres"), items=[], idx=0;
   function close(){ qres.hidden=true; items=[]; }
-  /* El investigador vive en un repositorio privado: el enlace solo abre a quien lo administra.
-     El nombre va por el portapapeles, no en la dirección. */
+  /* El investigador vive en un repositorio privado. Con la app conectada (investigador.js),
+     el pedido se hace aquí mismo; sin conexión, el panel explica cómo conectarla. */
   function nube(){
     var q=qin.value.trim(); if(q.split(/\s+/).length<2||q.length<6) return;
+    var TI=window.TelarInvestigador, con=TI&&TI.conectado();
     qres.appendChild(el("button",{class:"inv",type:"button",onmousedown:function(e){ e.preventDefault(); },onclick:function(){
-      copiar(q,"Nombre copiado: pégalo en el formulario.");
-      window.open("https://github.com/simonrovi-web/telar-investigador/issues/new?template=investigar.yml","_blank","noopener,noreferrer"); close(); }},[
-      el("span",{class:"k",text:"INVESTIGAR"}),el("span",{class:"t",text:"Buscar a «"+q+"» en la web"}),el("span",{class:"s",text:"solo quien administra"})]));
+      close(); qin.blur(); qin.value="";
+      if(TI) TI.pedir(q); }},[
+      el("span",{class:"k",text:"INVESTIGAR"}),el("span",{class:"t",text:"Buscar a «"+q+"» en la web"}),
+      el("span",{class:"s",text:con?"aquí mismo":"conecta la app primero"})]));
   }
   function activate(it){
     if(!it) return;

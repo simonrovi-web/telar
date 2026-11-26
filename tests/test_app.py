@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 DOCS = Path(__file__).parents[1] / "docs"
-TEXTOS = ["index.html", "analisis.js", "telar-open.js", "sw.js", "manifest.webmanifest"]
+TEXTOS = ["index.html", "analisis.js", "investigador.js", "telar-open.js", "sw.js", "manifest.webmanifest"]
 
 
 def test_sin_ia_cerrada_ni_rutinas_remotas():
